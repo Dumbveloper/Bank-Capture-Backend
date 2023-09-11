@@ -13,16 +13,13 @@ import javax.persistence.*;
 @ToString
 public class Bank {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bank_seq")
-    @SequenceGenerator(name = "bank_seq", allocationSize = 1, sequenceName = "bank_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bankId;  //지점 ID
-    private String name;  //행원 이름
-    private String email;  // 행원 이메일
-    private String password;  // 행원 비밀번호
-    private String task;  // 행원 주업무
-    private String imgPath;  //행원 사진
-    private String info;  //행원 한줄 소개
-    private String reviewFlag; //행원 리뷰 공개 여부 플래그
-
+    private String bankName; // 지점이름
+    private double locationX; // 지점X좌표
+    private double locationY; // 지점Y좌표
+    private String bankPhone; // 지점전화번호
+    private String bankAddr; // 지점주소
 
 }
+

@@ -13,16 +13,15 @@ import javax.persistence.*;
 @ToString
 public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "schedule_seq")
-    @SequenceGenerator(name = "schedule_seq", allocationSize = 1, sequenceName = "schedule_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long scheduleId;  // 스케줄 iD
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "banker_id")
+    @JoinColumn(name = "bankerId")
     private Banker banker;  // 행원 ID
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bank_id")
+    @JoinColumn(name = "bankId")
     private Bank bank;  // 지점 ID
 
     private String schedule_date;  // 스케줄 날짜
