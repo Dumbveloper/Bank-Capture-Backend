@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+//test
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
