@@ -3,7 +3,7 @@ package web.mvc.dto;
 import lombok.*;
 
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @Getter
 @Setter
 @Builder

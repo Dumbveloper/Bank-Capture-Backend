@@ -13,11 +13,10 @@ import javax.persistence.*;
 @ToString
 public class Certification {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "certification_seq")
-    @SequenceGenerator(name = "certification_seq", allocationSize = 1, sequenceName = "certification_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long certificationId;  // 자격증 iD
-    
-    private String name;  // 자격증 이름
+
+    private String certificationName;  // 자격증 이름
 
 
 
