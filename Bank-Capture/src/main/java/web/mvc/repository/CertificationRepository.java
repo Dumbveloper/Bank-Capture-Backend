@@ -14,6 +14,6 @@ public interface CertificationRepository extends JpaRepository<Certification,Lon
      * @param bankerId
      * @return List<Certification>
      */
-    List<Certification> findCertificationByBankerId(String bankerId);
+    //List<Certification> findCertificationByBankerId(String bankerId);
 
 }

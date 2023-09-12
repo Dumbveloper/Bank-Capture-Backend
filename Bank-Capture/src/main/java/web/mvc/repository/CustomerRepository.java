@@ -12,5 +12,5 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
      * @param customerPassword
      * @return
      */
-    Customer findBy(String customerEmail, String customerPassword);
+    //Customer findBy(String customerEmail, String customerPassword);
 }

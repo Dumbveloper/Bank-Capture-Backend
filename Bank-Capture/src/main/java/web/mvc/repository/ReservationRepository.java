@@ -1,10 +1,15 @@
 package web.mvc.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import web.mvc.domain.MainTask;
 import web.mvc.domain.Reservation;
+import web.mvc.dto.mypage.CustomerScheduleResponseDTO;
 
 import java.util.List;
+
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long> {
     /**
@@ -13,7 +18,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
      *
      * @return String 성공여부
      */
-    String insertReservation(Reservation reservation);
+    //String insertReservation(Reservation reservation);
 
     /**
      * 예약취소
@@ -21,7 +26,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
      * @param reservationId
      * @return String 성공여부
      */
-    String deleteReservation(String reservationId);
+    //String deleteReservation(String reservationId);
 
     /**
      * /myPage/customer/schedule
@@ -30,7 +35,8 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
      * @param customerId
      * @return List<Reservation>
      */
-    List<Reservation> findReservationByCustomerId(Long customerId);
-
-
+    //List<Reservation> findReservationByCustomerId(Long customerId);
+// b.bank_name AS bankName, b.bank_addr AS bankAddr,    INNER JOIN banker b ON r.bank_id = b.bank_id
+    @Query(value = "SELECT NEW web.mvc.dto.mypage.CustomerScheduleResponseDTO(r.reservationId, b.bankName, b.bankAddr, r.reservationDate, r.reservationTime,t.taskName, r.comment, r.reservationFinishFlag) FROM Reservation r JOIN r.bank b JOIN r.task t LEFT JOIN r.customer c WHERE c.customerId = :customerId")
+    List<CustomerScheduleResponseDTO> findReservationDetailsByCustomerId(@Param("customerId") Long customerId);
 }

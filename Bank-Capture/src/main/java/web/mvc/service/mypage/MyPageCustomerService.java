@@ -1,34 +1,22 @@
 package web.mvc.service.mypage;
 
 import web.mvc.dto.mypage.CustomerReviewRequestDTO;
-import web.mvc.dto.mypage.CustomerScheduleAfterResponseDTO;
-import web.mvc.dto.mypage.CustomerScheduleBeforeResponseDTO;
+import web.mvc.dto.mypage.CustomerScheduleResponseDTO;
 
 import java.util.List;
 
 public interface MyPageCustomerService {
 
     /**
-     * /myPage/customer/schedule/before
-     * 마이페이지(고객) - 예약관리-방문전
+     * /myPage/customer/schedule
+     * 마이페이지(고객) - 예약관리
      * Reservation, Bank , Document , task
      *
      * @param customerId
-     * @param finishFlag
-     * @return List<CustomerScheduleBeforeResponseDTO>
+     * @return List<CustomerScheduleResponseDTO>
      */
-    public List<CustomerScheduleBeforeResponseDTO> customerScheduleBefore(Long customerId, String finishFlag);
+    public List<CustomerScheduleResponseDTO> customerSchedule(Long customerId);
 
-    /**
-     * /myPage/customer/schedule/after
-     * 마이페이지(고객) - 예약관리-방문후
-     * Reservation, Bank , task , BankReview
-     *
-     * @param customerId
-     * @param finishFlag
-     * @return List<CustomerScheduleAfterResponseDTO>
-     */
-    public List<CustomerScheduleAfterResponseDTO> customerScheduleAfter(Long customerId, String finishFlag);
 
     /**
      * /myPage/customer/review
@@ -38,5 +26,6 @@ public interface MyPageCustomerService {
      * @param customerReviewRequestDTO
      * @return Object
      */
-    public Object insertReview(CustomerReviewRequestDTO customerReviewRequestDTO);
+    public int insertReview(CustomerReviewRequestDTO customerReviewRequestDTO);
+
 }

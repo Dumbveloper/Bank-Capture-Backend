@@ -15,7 +15,7 @@ public interface BankerRepository extends JpaRepository<Banker,Long> {
      * @param customerPassword
      * @return
      */
-    Banker findByBanker(String customerEmail, String customerPassword);
+    //Banker findByBanker(String customerEmail, String customerPassword);
 
     /**
      * /reservation/bankerAll
@@ -24,5 +24,5 @@ public interface BankerRepository extends JpaRepository<Banker,Long> {
      * @param bankId
      * @return List<Banker>
      */
-    List<Banker> findBanker(String bankId);
+    //List<Banker> findBanker(String bankId);
 }

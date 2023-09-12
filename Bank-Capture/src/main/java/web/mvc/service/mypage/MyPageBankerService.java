@@ -1,34 +1,23 @@
 package web.mvc.service.mypage;
 
+import web.mvc.domain.Schedule;
 import web.mvc.dto.mypage.BankerRankingResponseDTO;
-import web.mvc.dto.mypage.BankerScheduleAfterResponseDTO;
-import web.mvc.dto.mypage.BankerScheduleBeforeResponseDTO;
+import web.mvc.dto.mypage.BankerScheduleResponseDTO;
 import web.mvc.dto.reservation.ScheduleDTO;
 
 import java.util.List;
 
 public interface MyPageBankerService {
-    /**
-     * /myPage/banker/schedule/before
-     * 마이페이지(행원) - 예약관리-오늘의 방문
-     * Reservation , Customer , Task
-     *
-     * @param bankerId
-     * @param finishFlag
-     * @return List<BankerScheduleBeforeResponseDTO>
-     */
-    List<BankerScheduleBeforeResponseDTO> bankerScheduleBefore(Long bankerId, String finishFlag);
 
     /**
-     * /myPage/banker/schedule/after
-     * 마이페이지(행원) - 예약관리-방문후 예약
+     * /myPage/banker/schedule
+     * 마이페이지(행원) - 예약관리
      * Reservation , Customer , Task , BankerReview
      *
      * @param bankerId
-     * @param finishFlag
-     * @return List<BankerScheduleAfterResponseDTO>
+     * @return List<BankerScheduleResponseDTO>
      */
-    List<BankerScheduleAfterResponseDTO> bankerScheduleAfter(Long bankerId, String finishFlag);
+    List<BankerScheduleResponseDTO> bankerSchedule(Long bankerId);
 
     /**
      * /myPage/banker/ranking
@@ -47,7 +36,7 @@ public interface MyPageBankerService {
      *
      * @return Object
      */
-    Object checkTime(ScheduleDTO scheduleDTO);
+    Schedule checkTime(ScheduleDTO scheduleDTO);
 
 
 }

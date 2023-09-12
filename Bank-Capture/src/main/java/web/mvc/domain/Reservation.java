@@ -1,6 +1,8 @@
 package web.mvc.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@DynamicInsert
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +28,19 @@ public class Reservation {
     private Banker banker;  // 행원
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bankId")
+    private Bank bank;  // 행원
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
     private Task task;  // 업무
     private String reservationDate;  // 예약 날짜
     private String reservationTime;  // 예약 시간
-    private String reservationFinishFlag;  // 예약 완료 여부
+    @ColumnDefault("'F'")
+    private String reservationFinishFlag ;  // 예약 완료 여부
+    private int bankerStarRating;  //행원리뷰 평점
+    private int bankStarRating;  //지점리뷰 평점
+    private String comment;  //행원리뷰 코멘트
+
 
 }

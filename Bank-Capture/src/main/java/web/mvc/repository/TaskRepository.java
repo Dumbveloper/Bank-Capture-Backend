@@ -14,5 +14,5 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
      * @param bankerId
      * @return List<Task>
      */
-    List<Task> findTaskByBankerId(String bankerId);
+    //List<Task> findTaskByBankerId(String bankerId);
 }
