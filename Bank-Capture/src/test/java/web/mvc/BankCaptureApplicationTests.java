@@ -81,15 +81,32 @@ class BankCaptureApplicationTests {
 //        Bank bank1 = Bank.builder().bankAddr("서울시 양재대로").bankName("선릉점").bankPhone("02-111-1111").build();
 //        bankRepository.save(bank1);
 //        Task task1 = Task.builder().taskName("개인대출").build();
-//       taskRepository.save(task1);
+//        taskRepository.save(task1);
         Reservation res = Reservation.builder().
-                reservationDate("20220303").
+                reservationDate("20220304").
                 reservationTime("2")
-                .customer(Customer.builder().customerId(2L).build())
-                .banker(Banker.builder().bankerId(3L).build())
-                .task(Task.builder().taskId(2L).build())
-                .bank(Bank.builder().bankId(3L).build()).build();
+                .customer(Customer.builder().customerId(1L).build())
+                .banker(Banker.builder().bankerId(1L).build())
+                .task(Task.builder().taskId(1L).build())
+                .bank(Bank.builder().bankId(1L).build()).build();
         reservationRepository.save(res);
+//        Customer customer1 = Customer.builder().customerName("유정").build();
+//        customerRepository.save(customer1);
+//        Banker banker1 = Banker.builder().bankerName("지현").bankerCareer("3년").bankerInfo("잘부탁드려요").build();
+//        bankerRepository.save(banker1);
+//        Bank bank1 = Bank.builder().bankAddr("서울시 양재대로").bankName("선릉점").bankPhone("02-111-1111").build();
+//        bankRepository.save(bank1);
+//        Task task1 = Task.builder().taskName("적금").build();
+//       taskRepository.save(task1);
+
+//        Reservation res = Reservation.builder().
+//                reservationDate("20220304").
+//                reservationTime("2")
+//                .customer(customer1)
+//                .banker(banker1)
+//                .task(task1)
+//                .bank(bank1).build();
+//        reservationRepository.save(res);
     }
 
     /**
@@ -102,6 +119,11 @@ class BankCaptureApplicationTests {
                 .bankerStarRating(3).build());
         System.out.println(review);
     }
+    @Test
+    void deleteReview(){
+        int review = myPageCustomerService.deletetReview(3L);
+        System.out.println(review);
+    }
 
     @Test
     void findReservationByCustomerId(){
@@ -109,10 +131,7 @@ class BankCaptureApplicationTests {
         list.forEach(b -> System.out.println(b));
     }
 
-//    @Test
-//    void deleteReview(){
-//        bankerRepository.deleteById(2L);
-//    }
+
 
 
 

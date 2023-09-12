@@ -28,4 +28,14 @@ public interface MyPageCustomerService {
      */
     public int insertReview(CustomerReviewRequestDTO customerReviewRequestDTO);
 
+    /**
+     * /myPage/customer/review
+     * 마이페이지(고객) - 리뷰작성
+     * BankReview , BankerReview
+     *
+     * @param reservationId
+     * @return int
+     */
+    public int deletetReview(Long reservationId);
+
 }

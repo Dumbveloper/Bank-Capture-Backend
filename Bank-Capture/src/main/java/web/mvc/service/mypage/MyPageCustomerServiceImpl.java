@@ -40,4 +40,17 @@ public class MyPageCustomerServiceImpl implements MyPageCustomerService{
 
         return 1;
     }
+
+    @Override
+    public int deletetReview(Long reservationId) {
+        Reservation reviewReservation = reservationRep.findById(reservationId).orElse(null);
+        reviewReservation.setComment(null);
+        reviewReservation.setBankStarRating(0);
+        reviewReservation.setBankerStarRating(0);
+        Reservation result = reservationRep.save(reviewReservation);
+        if(result ==null)
+            return 0;
+
+        return 1;
+    }
 }
