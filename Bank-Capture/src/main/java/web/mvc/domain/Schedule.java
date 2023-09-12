@@ -18,13 +18,13 @@ public class Schedule {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bankerId")
-    private Banker banker;  // 행원 ID
+    private Banker banker;  // 행원
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bankId")
-    private Bank bank;  // 지점 ID
+    private Bank bank;  // 지점
 
-    private String schedule_date;  // 스케줄 날짜
+    private String scheduleDate;  // 스케줄 날짜
     private int time1;  // 1부  9시
     private int time2;  // 2부  10시
     private int time3;  // 3부  11시

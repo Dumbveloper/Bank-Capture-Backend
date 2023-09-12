@@ -1,20 +1,17 @@
-package web.mvc.domain;
+package web.mvc.dto.reservation;
 
 import lombok.*;
 
-import javax.persistence.*;
-
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-//test
-public class Bank {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+/**
+ * /reservation/marker
+ * 지점 마커 상세
+ */
+public class BankDTO {
     private Long bankId;  //지점 ID
     private String bankName; // 지점이름
     private double locationX; // 지점X좌표
@@ -22,4 +19,3 @@ public class Bank {
     private String bankPhone; // 지점전화번호
     private String bankAddr; // 지점주소
 }
-

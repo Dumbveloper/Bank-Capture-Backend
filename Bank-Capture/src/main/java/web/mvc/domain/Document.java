@@ -18,9 +18,9 @@ public class Document {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
-    private Task task;  // 업무 ID
+    private Task task;  // 업무
     private String documentName; // 필요서류 이름
-    private String link;  // 필요서류 링크
+    private String documentLink;  // 필요서류 링크
 
 
 }

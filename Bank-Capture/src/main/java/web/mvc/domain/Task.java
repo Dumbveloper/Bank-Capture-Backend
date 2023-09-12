@@ -17,6 +17,4 @@ public class Task {
     private Long taskId;  //업무 ID
     private String taskName;  //업무 이름
 
-
-
 }

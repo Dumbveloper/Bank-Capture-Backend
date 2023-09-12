@@ -18,11 +18,11 @@ public class MainTask {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "banker_id")
-    private Banker banker;  // 행원 ID
+    private Banker banker;  // 행원
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id")
-    private Task task;  // 업무 ID
+    private Task task;  // 업무
 
 
 
