@@ -18,6 +18,7 @@ public class CustomerScheduleResponseDTO {
     private String bankAddr; // 지점주소
     private String reservationDate;  // 예약 날짜
     private String reservationTime;  // 예약 시간
+    private String bankerName;  // 행원이름
     private String taskName;  //업무 이름
   //  private String documentLink;  // 필요서류 링크
     private String bankerReviewComment;  // 행원리뷰 코멘트

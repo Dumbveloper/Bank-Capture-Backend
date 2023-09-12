@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import web.mvc.domain.*;
+import web.mvc.dto.mypage.BankerScheduleResponseDTO;
 import web.mvc.dto.mypage.CustomerReviewRequestDTO;
 import web.mvc.dto.mypage.CustomerScheduleResponseDTO;
+import web.mvc.dto.reservation.ScheduleDTO;
 import web.mvc.repository.*;
+import web.mvc.service.mypage.MyPageBankerService;
 import web.mvc.service.mypage.MyPageCustomerService;
 import web.mvc.service.mypage.MyPageCustomerServiceImpl;
 
@@ -44,6 +47,10 @@ class BankCaptureApplicationTests {
 
     @Autowired
     private MyPageCustomerService myPageCustomerService;
+    @Autowired
+    private MyPageBankerService myPageBankerService;
+
+
 //    void insertReviews() {
 //
 //
@@ -127,8 +134,31 @@ class BankCaptureApplicationTests {
 
     @Test
     void findReservationByCustomerId(){
-        List<CustomerScheduleResponseDTO> list = myPageCustomerService.customerSchedule(2L);
+        List<CustomerScheduleResponseDTO> list = myPageCustomerService.customerSchedule(1L);
         list.forEach(b -> System.out.println(b));
+    }
+    @Test
+    void findReservationByBankerId(){
+        List<BankerScheduleResponseDTO> list = myPageBankerService.bankerSchedule(1L);
+        list.forEach(b -> System.out.println(b));
+    }
+
+    @Test
+    void insertSchedule(){
+        ScheduleDTO scheduleDTO = ScheduleDTO.builder()
+                .bankerId(1L)
+                .bankId(1L)
+                .scheduleDate("20230812")
+                .time1(1)
+                .time2(1)
+                .time3(1)
+                .time4(0)
+                .time5(1)
+                .time6(1)
+                .time7(0)
+                .build();
+        Schedule schedule = myPageBankerService.checkTime(scheduleDTO);
+        System.out.println(schedule);
     }
 
 
