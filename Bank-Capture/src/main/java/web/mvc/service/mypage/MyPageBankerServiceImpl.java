@@ -69,7 +69,7 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
         Reservation reviewReservation = reservationRep.findById(reservationId).orElse(null);
         reviewReservation.setReservationFinishFlag("T");
         Reservation result = reservationRep.save(reviewReservation);
-        if(result ==null)
+        if(result == null)
             return 0;
 
         return 1;

@@ -41,7 +41,6 @@ import java.util.List;
 
 
 @SpringBootTest
-@Commit
 class BankCaptureApplicationTests {
 
     @Autowired
@@ -73,7 +72,7 @@ class BankCaptureApplicationTests {
 
     CustomerDTO customerDTO = new CustomerDTO("원식", "wonsik1@naver.com", "1234", "010-0000-1111");
 
-    ReservationDTO reservationDTO = new ReservationDTO(1L, 1L, 1L, "20230304", "4", "F");
+    ReservationDTO reservationDTO = new ReservationDTO(1L, 1L, 1L, 1L,"20230304", "4", "F");
 
     @Test
     @Rollback(value = false)

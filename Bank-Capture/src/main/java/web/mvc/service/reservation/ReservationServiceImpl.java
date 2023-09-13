@@ -177,11 +177,13 @@ public class ReservationServiceImpl implements ReservationService{
         Customer customer = customerRepository.findById(reservationDTO.getCustomerId()).orElse(null);
         Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
         Task task = taskRepository.findById(reservationDTO.getTaskId()).orElse(null);
+        Bank bank = bankRep.findById(reservationDTO.getBankId()).orElse(null);
 
         Reservation reservation = Reservation.builder().
                 customer(customer).
                 banker(banker).
                 task(task).
+                bank(bank).
                 reservationDate(reservationDTO.getReservationDate()).
                 reservationTime(reservationDTO.getReservationTime()).
                 reservationFinishFlag(reservationDTO.getReservationFinishFlag()).
