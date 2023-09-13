@@ -1,6 +1,8 @@
 package web.mvc.service.user;
 
+import web.mvc.dto.users.BankerLoginRequestDTO;
 import web.mvc.dto.users.CustomerDTO;
+import web.mvc.dto.users.CustomerLoginRequestDTO;
 
 import java.util.List;
 
@@ -11,22 +13,21 @@ public interface UserService {
      * 로그인
      * CustomerRepository
      *
-     * @param email
-     * @param password
+     * @param customerLoginRequestDTO
+     * @return String 성공여부
      * @return String 성공여부
      */
-    public String customerLogin(String email, String password);
+    public String customerLogin(CustomerLoginRequestDTO customerLoginRequestDTO);
 
     /**
      * /users/login
      * 로그인
      * BankerRepository
      *
-     * @param email
-     * @param password
+     * @param bankerLoginRequestDTO
      * @return String 성공여부
      */
-    public String BankerLogin(String email, String password);
+    public String bankerLogin(BankerLoginRequestDTO bankerLoginRequestDTO);
 
     /**
      * /users/register

@@ -3,6 +3,7 @@ package web.mvc.domain;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @ToString
 @DynamicInsert
+@DynamicUpdate
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

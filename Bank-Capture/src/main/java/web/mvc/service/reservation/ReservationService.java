@@ -28,6 +28,7 @@ public interface ReservationService {
      */
     public BankerInfoResponseDTO findBankerInfo(String bankerId);
 
+
     /**
      * /reservation/done
      * 예약하기
@@ -36,7 +37,7 @@ public interface ReservationService {
      * @param reservationDTO
      * @return String 성공여부
      */
-    public String doReservation(ReservationDTO reservationDTO);
+    public String doReservation(ReservationDTO reservationDTO, Long reservationId);
 
     /**
      * 예약취소
@@ -45,6 +46,16 @@ public interface ReservationService {
      * @param reservationId
      * @return String 성공여부
      */
-    public String cancelReservation(String reservationId);
+    public String cancelReservation(Long reservationId);
+
+    /**
+     * 예약변경
+     * Reservation , Schedule
+     *
+     * @param reservationDTO
+     * @param reservationId
+     * @return String 성공여부
+     */
+    public String changeReservation(ReservationDTO reservationDTO, Long reservationId);
 
 }

@@ -14,13 +14,21 @@ import java.util.List;
 
 public interface BankerRepository extends JpaRepository<Banker,Long> {
 
+
     /**
-     *
-     * @param customerEmail
-     * @param customerPassword
-     * @return
+     * 행원 조회 - 로그인, 회원가입시 해당 이메일을 가진 행원이 있는지 조회
+     * @param bankerEmail
+     * @return Banker
      */
-    //Banker findByBanker(String customerEmail, String customerPassword);
+    Banker findByBankerEmail(String bankerEmail);
+
+    /**
+     * 행원 조회 - 로그인시 해당 이메일, 비밀번호를 가진 행원이 있는지 조회
+     * @param bankerEmail
+     * @param bankerPassword
+     * @return Banker
+     */
+    Banker findByBankerEmailAndBankerPassword(String bankerEmail, String bankerPassword);
 
     /**
      * /reservation/bankerAll
