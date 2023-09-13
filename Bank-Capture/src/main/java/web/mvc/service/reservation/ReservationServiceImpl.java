@@ -42,7 +42,7 @@ public class ReservationServiceImpl implements ReservationService{
     @Autowired
     private BankRepository bankRep;
 
-    @Override
+    //@Override
     public List<BankDTO> findBankAll() {
         List<BankDTO> bankdtolist = new ArrayList<>();
         List<Map<String, Object>> bankmaplist = bankRep.findDistinctAvgStar();
@@ -132,6 +132,7 @@ public class ReservationServiceImpl implements ReservationService{
         QBanker banker = QBanker.banker;
         QCertification certification = QCertification.certification;
         QBankerCertification bankerCertification = QBankerCertification.bankerCertification;
+        QReservation reservation = QReservation.reservation;
 
         /**
          * Parameter bankerId가 가진 자격증 리스트 조회
@@ -156,21 +157,16 @@ public class ReservationServiceImpl implements ReservationService{
         /**
          * bankerId에 해당하는 리뷰 리스트 조회
          */
-        List<BankerReview> list = bankerReviewRep.findBankerReviewByBanker_bankerId(bankerId);
 
-        /**
-         * 조회한 리뷰 리스트 domain -> dto로 생성
-         */
-        List<BankerReviewDTO> bankerReviewDTOS = list.stream().map(
-                bankerReview -> {
-                    return new BankerReviewDTO(bankerReview.getBankerReviewId(),bankerReview.getReservation()
-                            ,bankerReview.getBanker(),bankerReview.getCustomer(),bankerReview.getBankerReviewDate()
-                            ,bankerReview.getBankerStarRating(),bankerReview.getBankerReviewComment());
-                }
-        ).collect(Collectors.toList());
+        List<BankerReviewDTO> reDto = jpaQueryFactory.select(Projections.constructor(
+                        BankerReviewDTO.class,reservation.comment))
+                .from(reservation)
+                .where(reservation.banker.bankerId.eq(bankerId))
+                .fetch();
+
 
         //자격증리스트, 리뷰리스트 BankerInfoResponseDTO로 생성
-        BankerInfoResponseDTO bankerInfo = new BankerInfoResponseDTO(certificationDTOS,bankerReviewDTOS);
+        BankerInfoResponseDTO bankerInfo = new BankerInfoResponseDTO(certificationDTOS,reDto);
 
         return bankerInfo;
     }

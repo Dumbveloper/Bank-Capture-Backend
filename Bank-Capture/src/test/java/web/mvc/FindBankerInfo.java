@@ -1,18 +1,14 @@
 package web.mvc;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import web.mvc.domain.Certification;
-import web.mvc.domain.QBanker;
-import web.mvc.domain.QBankerCertification;
-import web.mvc.domain.QCertification;
-import web.mvc.domain.review.BankerReview;
+import web.mvc.domain.*;
 import web.mvc.dto.reservation.BankerInfoResponseDTO;
 import web.mvc.dto.reservation.BankerReviewDTO;
 import web.mvc.dto.reservation.CertificationDTO;
-import web.mvc.repository.review.BankerReviewRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,43 +17,50 @@ import java.util.stream.Collectors;
 class FindBankerInfo {
 
     @Autowired
-    private JPAQueryFactory queryFactory;
-    @Autowired
-    BankerReviewRepository bankerReviewRep;
+    private JPAQueryFactory jpaQueryFactory;
 
     @Test
     public void 행원자격증리뷰리스트조회(){
         QBanker banker = QBanker.banker;
         QCertification certification = QCertification.certification;
         QBankerCertification bankerCertification = QBankerCertification.bankerCertification;
+        QReservation reservation = QReservation.reservation;
 
-        List<Certification> result = queryFactory.select(certification)
+        /**
+         * Parameter bankerId가 가진 자격증 리스트 조회
+         * banker, banker_certification, certification 조인
+         */
+        List<Certification> result = jpaQueryFactory.select(certification)
                 .from(banker)
                 .join(bankerCertification).on(banker.bankerId.eq(bankerCertification.banker.bankerId))
                 .join(certification).on(bankerCertification.certification.certificationId.eq(certification.certificationId))
-                .where(banker.bankerId.eq(5L))
+                .where(banker.bankerId.eq(1L))
                 .fetch();
 
+        /**
+         * 조회한 자격증 리스트 domain -> dto로 생성
+         */
         List<CertificationDTO> certificationDTOS = result.stream().map(
                 certification1 -> {
                     return new CertificationDTO(certification1.getCertificationId(),certification1.getCertificationName());
                 }
         ).collect(Collectors.toList());
 
-        List<BankerReview> list = bankerReviewRep.findBankerReviewByBanker_bankerId(5L);
+        /**
+         * bankerId에 해당하는 리뷰 리스트 조회
+         */
 
-        List<BankerReviewDTO> bankerReviewDTOS = list.stream().map(
-                bankerReview -> {
-                    return new BankerReviewDTO(bankerReview.getBankerReviewId(),bankerReview.getReservation()
-                            ,bankerReview.getBanker(),bankerReview.getCustomer(),bankerReview.getBankerReviewDate()
-                            ,bankerReview.getBankerStarRating(),bankerReview.getBankerReviewComment());
-                }
-        ).collect(Collectors.toList());
-
-        BankerInfoResponseDTO bankerInfo = new BankerInfoResponseDTO(certificationDTOS,bankerReviewDTOS);
+        List<BankerReviewDTO> reDto = jpaQueryFactory.select(Projections.constructor(
+                        BankerReviewDTO.class,reservation.comment))
+                .from(reservation)
+                .where(reservation.banker.bankerId.eq(1L))
+                .fetch();
 
 
-        System.out.println("***********************"+bankerInfo);
+        //자격증리스트, 리뷰리스트 BankerInfoResponseDTO로 생성
+        BankerInfoResponseDTO bankerInfo = new BankerInfoResponseDTO(certificationDTOS,reDto);
+
+        System.out.println(bankerInfo);
     }
 
 

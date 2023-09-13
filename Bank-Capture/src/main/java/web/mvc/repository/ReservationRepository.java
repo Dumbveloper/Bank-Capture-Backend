@@ -30,7 +30,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
      */
 
     //행원에 해당하는 리뷰리스트 검색
-    List<BankerReview> findBankerReviewByBanker_bankerId(Long bankerId);
+    //List<BankerReview> findBankerReviewByBanker_bankerId(Long bankerId);
 
 
 

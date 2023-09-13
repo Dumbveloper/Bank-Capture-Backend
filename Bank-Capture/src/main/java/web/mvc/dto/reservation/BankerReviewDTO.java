@@ -10,6 +10,7 @@ import web.mvc.domain.Reservation;
 @Getter
 @Setter
 @Builder
+@ToString
 /**
  * /reservation/bankerinfo/
  * 예약하기 - 행원선택(행원정보)
@@ -21,7 +22,10 @@ public class BankerReviewDTO {
     private Banker banker;  //행원
     private Customer customer;  //고객
     private String bankerReviewDate;  //리뷰 작성 날짜
-    private int bankerStarRating;  // 행원리뷰 별점
+    private double bankerStarRating;  // 행원리뷰 별점
     private String bankerReviewComment;  // 행원리뷰 코멘트
 
+    public BankerReviewDTO (String bankerReviewComment){
+        this.bankerReviewComment=bankerReviewComment;
+    }
 }

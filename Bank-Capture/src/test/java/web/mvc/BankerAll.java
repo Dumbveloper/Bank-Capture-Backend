@@ -9,7 +9,6 @@ import web.mvc.domain.*;
 import web.mvc.dto.reservation.BankerAllResponseDTO;
 import web.mvc.dto.reservation.ScheduleDTO;
 import web.mvc.dto.reservation.TaskDTO;
-import web.mvc.repository.review.BankerReviewRepository;
 
 import java.util.List;
 
@@ -18,8 +17,6 @@ class BankerAll {
 
     @Autowired
     private JPAQueryFactory queryFactory;
-    @Autowired
-    BankerReviewRepository bankerReviewRep;
 
     @Test
     public void 뱅커(){
