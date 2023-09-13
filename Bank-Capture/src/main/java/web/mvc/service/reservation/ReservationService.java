@@ -1,5 +1,6 @@
 package web.mvc.service.reservation;
 
+import web.mvc.dto.reservation.BankDTO;
 import web.mvc.dto.reservation.BankerAllResponseDTO;
 import web.mvc.dto.reservation.BankerInfoResponseDTO;
 import web.mvc.dto.reservation.ReservationDTO;
@@ -9,14 +10,23 @@ import java.util.List;
 public interface ReservationService {
 
     /**
+     * /reservation/marker
+     * 지점 마커 표시
+     * @return List<BankDTO>
+     */
+    public List<BankDTO> findBankAll();
+
+
+    /**
      * /reservation/bankerAll
      * 예약하기 - 예약가능한 행원 조회
      * Banker , Schedule , Task , 계산뷰
      *
      * @param bankId
+     * @param taskId
      * @return List<BankerAllResponseDTO>
      */
-    public List<BankerAllResponseDTO> findBankerAll(String bankId);
+    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId);
 
     /**
      * /reservation/bankerinfo/
@@ -26,7 +36,7 @@ public interface ReservationService {
      * @param bankerId
      * @return BankerInfoResponseDTO
      */
-    public BankerInfoResponseDTO findBankerInfo(String bankerId);
+    public BankerInfoResponseDTO findBankerInfo(Long bankerId);
 
 
     /**

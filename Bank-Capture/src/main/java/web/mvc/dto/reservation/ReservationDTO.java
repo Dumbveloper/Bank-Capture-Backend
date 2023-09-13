@@ -28,4 +28,13 @@ public class ReservationDTO {
         this.reservationFinishFlag = reservationFinishFlag;
     }
 
+    public ReservationDTO(Long customerId, Long bankerId, Long taskId, String reservationDate, String reservationTime) {
+        this.customerId = customerId;
+        this.bankerId = bankerId;
+        this.taskId = taskId;
+        this.reservationDate = reservationDate;
+        this.reservationTime = reservationTime;
+
+    }
+
 }

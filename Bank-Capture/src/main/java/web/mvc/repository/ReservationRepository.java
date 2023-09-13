@@ -22,6 +22,19 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
     //String insertReservation(Reservation reservation);
 
     /**
+     * /reservation/bankerinfo/
+     * 예약하기 - 행원선택(행원정보) / 행원의 리뷰 조회
+     *
+     * @param bankerId
+     * @return List<BankerReview>
+     */
+
+    //행원에 해당하는 리뷰리스트 검색
+    List<BankerReview> findBankerReviewByBanker_bankerId(Long bankerId);
+
+
+
+    /**
      * 예약취소
      *
      * @param reservationId

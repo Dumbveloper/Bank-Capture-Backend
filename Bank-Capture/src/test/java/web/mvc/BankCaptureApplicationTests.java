@@ -12,6 +12,7 @@ import web.mvc.dto.mypage.BankerRankingResponseDTO;
 import web.mvc.dto.mypage.BankerScheduleResponseDTO;
 import web.mvc.dto.mypage.CustomerReviewRequestDTO;
 import web.mvc.dto.mypage.CustomerScheduleResponseDTO;
+import web.mvc.dto.reservation.BankDTO;
 import web.mvc.dto.reservation.ReservationDTO;
 import web.mvc.dto.reservation.ScheduleDTO;
 import web.mvc.dto.users.BankerLoginRequestDTO;
@@ -181,9 +182,18 @@ class BankCaptureApplicationTests {
 //        reservationRepository.save(res);
     }
 
-    /**
-     * insertReview
-     */
+    @Test
+    void printBankDTO(){
+        //현재는 test하면 에러가 나는데
+        //모든 bank_id의 평균별점 데이터를 채워주지 않아서 error 발생했음
+        List<BankDTO> list=reservationService.findBankAll();
+        for(BankDTO dto:list){
+            System.out.println(dto);
+        }}
+
+        /**
+         * insertReview
+         */
     @Test
     void insertReview(){
         int review = myPageCustomerService.insertReview(CustomerReviewRequestDTO.builder().reservationId(3L).bankerReviewComment("완친")

@@ -31,7 +31,7 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bankId")
-    private Bank bank;  // 행원
+    private Bank bank;  // 지점
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
