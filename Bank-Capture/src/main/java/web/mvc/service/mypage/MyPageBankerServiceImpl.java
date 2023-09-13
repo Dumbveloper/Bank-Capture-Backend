@@ -1,9 +1,13 @@
 package web.mvc.service.mypage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import web.mvc.domain.Bank;
 import web.mvc.domain.Banker;
+import web.mvc.domain.Reservation;
 import web.mvc.domain.Schedule;
 import web.mvc.dto.mypage.BankerRankingResponseDTO;
 import web.mvc.dto.mypage.BankerScheduleResponseDTO;
@@ -32,9 +36,12 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
         return list;
     }
 
+
+
     @Override
-    public List<BankerRankingResponseDTO> bankerRanking(Long bankId) {
-        return null;
+    public Page<BankerRankingResponseDTO> bankerRanking(Long bankId,int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return bankerRep.findBankerRankingByBankId(bankId, pageable);
     }
 
     @Override
@@ -55,5 +62,17 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
         Schedule result = scheduleRep.save(insertSchedule);
 
         return result;
+    }
+
+    @Override
+    public int updateFlag(Long reservationId) {
+        Reservation reviewReservation = reservationRep.findById(reservationId).orElse(null);
+        reviewReservation.setReservationFinishFlag("T");
+        Reservation result = reservationRep.save(reviewReservation);
+        if(result ==null)
+            return 0;
+
+        return 1;
+
     }
 }

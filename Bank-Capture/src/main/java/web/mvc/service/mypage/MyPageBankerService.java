@@ -1,5 +1,6 @@
 package web.mvc.service.mypage;
 
+import org.springframework.data.domain.Page;
 import web.mvc.domain.Schedule;
 import web.mvc.dto.mypage.BankerRankingResponseDTO;
 import web.mvc.dto.mypage.BankerScheduleResponseDTO;
@@ -27,7 +28,7 @@ public interface MyPageBankerService {
      * @param bankId
      * @return List<BankerRankingResponseDTO>
      */
-    List<BankerRankingResponseDTO> bankerRanking(Long bankId);
+    Page<BankerRankingResponseDTO> bankerRanking(Long bankId,int page, int pageSize);
 
     /**
      * /myPage/banker/checktime
@@ -38,5 +39,11 @@ public interface MyPageBankerService {
      */
     Schedule checkTime(ScheduleDTO scheduleDTO);
 
+    /**
+     * /myPage/banker/schedule/done
+     * 마이페이지(행원) - 방문완료 체크
+     * reservation_id
+     */
+    int updateFlag(Long reservationId);
 
 }

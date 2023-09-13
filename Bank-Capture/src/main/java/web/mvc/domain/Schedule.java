@@ -10,6 +10,8 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"bank","banker"})
+
 //@ToString
 public class Schedule {
     @Id

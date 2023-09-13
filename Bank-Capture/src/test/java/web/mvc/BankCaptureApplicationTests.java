@@ -3,8 +3,11 @@ package web.mvc;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import web.mvc.domain.*;
+import web.mvc.dto.mypage.BankerRankingResponseDTO;
 import web.mvc.dto.mypage.BankerScheduleResponseDTO;
 import web.mvc.dto.mypage.CustomerReviewRequestDTO;
 import web.mvc.dto.mypage.CustomerScheduleResponseDTO;
@@ -85,17 +88,20 @@ class BankCaptureApplicationTests {
 //        customerRepository.save(customer1);
 //        Banker banker1 = Banker.builder().bankerName("원식").bankerCareer("2년").bankerInfo("웃자웃자").build();
 //        bankerRepository.save(banker1);
+
+//        Banker banker2 = Banker.builder().bankerName("봉섭").bankerCareer("4년").bankerInfo("어라라").build();
+//        bankerRepository.save(banker2);
 //        Bank bank1 = Bank.builder().bankAddr("서울시 양재대로").bankName("선릉점").bankPhone("02-111-1111").build();
 //        bankRepository.save(bank1);
 //        Task task1 = Task.builder().taskName("개인대출").build();
 //        taskRepository.save(task1);
         Reservation res = Reservation.builder().
-                reservationDate("20220304").
-                reservationTime("2")
-                .customer(Customer.builder().customerId(1L).build())
-                .banker(Banker.builder().bankerId(1L).build())
+                reservationDate("20230304").
+                reservationTime("4")
+                .customer(Customer.builder().customerId(3L).build())
+                .banker(Banker.builder().bankerId(5L).build())
                 .task(Task.builder().taskId(1L).build())
-                .bank(Bank.builder().bankId(1L).build()).build();
+                .bank(Bank.builder().bankId(3L).build()).build();
         reservationRepository.save(res);
 //        Customer customer1 = Customer.builder().customerName("유정").build();
 //        customerRepository.save(customer1);
@@ -105,14 +111,14 @@ class BankCaptureApplicationTests {
 //        bankRepository.save(bank1);
 //        Task task1 = Task.builder().taskName("적금").build();
 //       taskRepository.save(task1);
-
+//
 //        Reservation res = Reservation.builder().
 //                reservationDate("20220304").
 //                reservationTime("2")
 //                .customer(customer1)
 //                .banker(banker1)
 //                .task(task1)
-//                .bank(bank1).build();
+//                .bank(Bank.builder().bankId(3L).build()).build();
 //        reservationRepository.save(res);
     }
 
@@ -121,25 +127,25 @@ class BankCaptureApplicationTests {
      */
     @Test
     void insertReview(){
-        int review = myPageCustomerService.insertReview(CustomerReviewRequestDTO.builder().reservationId(3L).bankerReviewComment("d유")
-                .bankStarRating(2)
-                .bankerStarRating(3).build());
+        int review = myPageCustomerService.insertReview(CustomerReviewRequestDTO.builder().reservationId(12L).bankerReviewComment("완친")
+                .bankStarRating(5)
+                .bankerStarRating(5).build());
         System.out.println(review);
     }
     @Test
     void deleteReview(){
-        int review = myPageCustomerService.deletetReview(3L);
+        int review = myPageCustomerService.deleteReview(3L);
         System.out.println(review);
     }
 
     @Test
     void findReservationByCustomerId(){
-        List<CustomerScheduleResponseDTO> list = myPageCustomerService.customerSchedule(1L);
+        List<CustomerScheduleResponseDTO> list = myPageCustomerService.customerSchedule(2L);
         list.forEach(b -> System.out.println(b));
     }
     @Test
     void findReservationByBankerId(){
-        List<BankerScheduleResponseDTO> list = myPageBankerService.bankerSchedule(1L);
+        List<BankerScheduleResponseDTO> list = myPageBankerService.bankerSchedule(3L);
         list.forEach(b -> System.out.println(b));
     }
 
@@ -162,7 +168,18 @@ class BankCaptureApplicationTests {
     }
 
 
+    @Test
+    void updateFlag(){
+        int review = myPageBankerService.updateFlag(3L);
+        System.out.println(review);
+    }
 
+    @Test
+    void bankerRanking(){
+
+        List<BankerRankingResponseDTO> list = myPageBankerService.bankerRanking(3L,0,3).toList();
+        System.out.println(list);
+    }
 
 
 }

@@ -36,6 +36,6 @@ public interface MyPageCustomerService {
      * @param reservationId
      * @return int
      */
-    public int deletetReview(Long reservationId);
+    public int deleteReview(Long reservationId);
 
 }
