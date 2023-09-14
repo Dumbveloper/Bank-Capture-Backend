@@ -28,6 +28,8 @@ public interface ReservationService {
      */
 //    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId);
 
+    List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId);
+
     /**
      * /reservation/bankerinfo/
      * 예약하기 - 행원선택(행원정보)

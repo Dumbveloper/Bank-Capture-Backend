@@ -42,7 +42,7 @@ public class ReservationServiceImpl implements ReservationService{
     @Autowired
     private BankRepository bankRepository;
 
-    //@Override
+    @Override
     public List<BankDTO> findBankAll() {
         List<BankDTO> bankdtolist = new ArrayList<>();
         List<Map<String, Object>> bankmaplist = bankRepository.findDistinctAvgStar();
@@ -50,7 +50,6 @@ public class ReservationServiceImpl implements ReservationService{
         for (Map<String, Object> b : bankmaplist) {
             Long bankId = ((BigInteger) b.get("bank_id")).longValue();
 
-            Double avgstar=((BigDecimal) b.get("avg_star")).doubleValue();
             String bankname = (String) b.get("bank_name");
             Double locationX = (Double) b.get("locationx");
             Double locationY = (Double) b.get("locationy");
@@ -58,10 +57,12 @@ public class ReservationServiceImpl implements ReservationService{
             String bankaddr = (String) b.get("bank_addr");
 
 
-
-            if(avgstar!=null) {
+            if(b.get("avg_star")!= null) {
+                Double avgstar = ((BigDecimal) b.get("avg_star")).doubleValue();
                 bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr, avgstar));
-            }else{
+            }
+
+            else{
                 bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr));
             }
 
@@ -69,64 +70,64 @@ public class ReservationServiceImpl implements ReservationService{
         return bankdtolist;
     }
 
-//    @Override
-//    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId) {
-//        QBanker banker = QBanker.banker;                        //banker Q클래스 생성
-//        QSchedule schedule = QSchedule.schedule;                //schedule Q클래스
-//        QMainTask mainTask = QMainTask.mainTask;                //mainTask Q클래스
-//        QTask task = QTask.task;                                //task Q클래스
-//        QBankerRating bankerRating = QBankerRating.bankerRating;    //뷰에 매핑 될 bankerRating Q클래스 생성
-//
-//        /**
-//         * QueryDSL로 banker, mainTask, task, 별점/리뷰수 뷰 조인하고
-//         *  Projectrions 사용하여 BankerAllResponseDTO 생성자로 직접 받기
-//         */
-//        List<BankerAllResponseDTO> bankerList = jpaQueryFactory.select(Projections.constructor(
-//                        BankerAllResponseDTO.class,banker.bankerId,banker.bankerName
-//                        ,banker.bankerCareer,banker.bankerImgPath,banker.bankerInfo
-//                        ,bankerRating.avgStar,bankerRating.cntComment,banker.bankerReviewFlag))
-//                .from(banker)
-//                .join(mainTask).on(banker.bankerId.eq(mainTask.banker.bankerId))
-//                .join(task).on(task.taskId.eq(mainTask.task.taskId))
-//                .join(bankerRating).on(bankerRating.bankerId.eq(banker.bankerId))
-//                .where(banker.bank.bankId.eq(bankId).and(task.taskId.eq(taskId)))
-//                .fetch();
-//
-//        /**
-//         * 행원별 스케줄리스트, 주업무 조회하여 BankerAllResponseDTO에 추가
-//         */
-//        for(int i = 0; i<bankerList.size();i++){
-//            /**
-//             * 스케줄리스트 조회
-//             * bankerList의 bankerid에 해당하는 스케줄리스트 조회 Query
-//             * */
-//            List<ScheduleDTO> schDto = jpaQueryFactory.select(Projections.constructor(
-//                            ScheduleDTO.class,schedule.banker.bankerId,schedule.bank.bankId,schedule.scheduleDate
-//                            ,schedule.time1,schedule.time2,schedule.time3,schedule.time4,schedule.time5,
-//                            schedule.time6,schedule.time7))
-//                    .from(schedule)
-//                    .where(schedule.banker.bankerId.eq(bankerList.get(i).getBankerId()))
-//                    .fetch();
-//
-//            /**
-//             * 주업무 조회
-//             * bankerList의 bankerid에 해당하는 주업무 조회 Query
-//             * banker,mainTask,task 조인
-//             */
-//            List<TaskDTO> taskdto = jpaQueryFactory.select(Projections.constructor(TaskDTO.class, task.taskName))
-//                    .from(task)
-//                    .join(mainTask).on(task.taskId.eq(mainTask.task.taskId))
-//                    .join(banker).on(banker.bankerId.eq(mainTask.banker.bankerId))
-//                    .where(banker.bankerId.eq(bankerList.get(i).getBankerId()))
-//                    .fetch();
-//
-//            //스케줄 리스트를 BankerAllResponseDTO에 삽입
-//            bankerList.get(i).setScheduleList(schDto);
-//            //주업무 리스트를 BankerAllResponseDTO에 삽입
-//            bankerList.get(i).setTaskList(taskdto);
-//        }
-//        return bankerList;
-//    }
+    @Override
+    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId) {
+        QBanker banker = QBanker.banker;                        //banker Q클래스 생성
+        QSchedule schedule = QSchedule.schedule;                //schedule Q클래스
+        QMainTask mainTask = QMainTask.mainTask;                //mainTask Q클래스
+        QTask task = QTask.task;                                //task Q클래스
+        QBankerRating bankerRating = QBankerRating.bankerRating;    //뷰에 매핑 될 bankerRating Q클래스 생성
+
+        /**
+         * QueryDSL로 banker, mainTask, task, 별점/리뷰수 뷰 조인하고
+         *  Projectrions 사용하여 BankerAllResponseDTO 생성자로 직접 받기
+         */
+        List<BankerAllResponseDTO> bankerList = jpaQueryFactory.select(Projections.constructor(
+                        BankerAllResponseDTO.class,banker.bankerId,banker.bankerName
+                        ,banker.bankerCareer,banker.bankerImgPath,banker.bankerInfo
+                        ,bankerRating.avgStar,bankerRating.cntComment,banker.bankerReviewFlag))
+                .from(banker)
+                .join(mainTask).on(banker.bankerId.eq(mainTask.banker.bankerId))
+                .join(task).on(task.taskId.eq(mainTask.task.taskId))
+                .join(bankerRating).on(bankerRating.bankerId.eq(banker.bankerId))
+                .where(banker.bank.bankId.eq(bankId).and(task.taskId.eq(taskId)))
+                .fetch();
+
+        /**
+         * 행원별 스케줄리스트, 주업무 조회하여 BankerAllResponseDTO에 추가
+         */
+        for(int i = 0; i<bankerList.size();i++){
+            /**
+             * 스케줄리스트 조회
+             * bankerList의 bankerid에 해당하는 스케줄리스트 조회 Query
+             * */
+            List<ScheduleDTO> schDto = jpaQueryFactory.select(Projections.constructor(
+                            ScheduleDTO.class,schedule.banker.bankerId,schedule.bank.bankId,schedule.scheduleDate
+                            ,schedule.time1,schedule.time2,schedule.time3,schedule.time4,schedule.time5,
+                            schedule.time6,schedule.time7))
+                    .from(schedule)
+                    .where(schedule.banker.bankerId.eq(bankerList.get(i).getBankerId()))
+                    .fetch();
+
+            /**
+             * 주업무 조회
+             * bankerList의 bankerid에 해당하는 주업무 조회 Query
+             * banker,mainTask,task 조인
+             */
+            List<TaskDTO> taskdto = jpaQueryFactory.select(Projections.constructor(TaskDTO.class, task.taskName))
+                    .from(task)
+                    .join(mainTask).on(task.taskId.eq(mainTask.task.taskId))
+                    .join(banker).on(banker.bankerId.eq(mainTask.banker.bankerId))
+                    .where(banker.bankerId.eq(bankerList.get(i).getBankerId()))
+                    .fetch();
+
+            //스케줄 리스트를 BankerAllResponseDTO에 삽입
+            bankerList.get(i).setScheduleList(schDto);
+            //주업무 리스트를 BankerAllResponseDTO에 삽입
+            bankerList.get(i).setTaskList(taskdto);
+        }
+        return bankerList;
+    }
     @Override
     public BankerInfoResponseDTO findBankerInfo(Long bankerId) {
         QBanker banker = QBanker.banker;
@@ -276,6 +277,7 @@ public class ReservationServiceImpl implements ReservationService{
           Banker beforeBanker = bankerRepository.findById(reservation.getBanker().getBankerId()).orElse(null);
           //기존예약 시간번호 앞에 "time"을 붙임
           String openTime = "time" + reservation.getReservationTime();
+          String beforeDate = reservation.getReservationDate();
 
           reservation.setReservationDate(reservationDTO.getReservationDate());
           reservation.setReservationFinishFlag(reservationDTO.getReservationFinishFlag());
@@ -303,7 +305,7 @@ public class ReservationServiceImpl implements ReservationService{
         Long updateOpen = jpaQueryFactory
                 .update(qSchedule)
                 .set((Path<Long>)openColumnPath, 1L)
-                .where(qSchedule.banker.eq(beforeBanker), qSchedule.scheduleDate.eq(reservation.getReservationDate()))
+                .where(qSchedule.banker.eq(beforeBanker), qSchedule.scheduleDate.eq(beforeDate))
                 .execute();
 
         Long updateClose = jpaQueryFactory
