@@ -195,14 +195,14 @@ class BankCaptureApplicationTests {
          */
     @Test
     void insertReview(){
-        int review = myPageCustomerService.insertReview(CustomerReviewRequestDTO.builder().reservationId(3L).bankerReviewComment("완친")
+        String review = myPageCustomerService.insertReview(CustomerReviewRequestDTO.builder().reservationId(3L).bankerReviewComment("완친")
                 .bankStarRating(5)
                 .bankerStarRating(5).build());
         System.out.println(review);
     }
     @Test
     void deleteReview(){
-        int review = myPageCustomerService.deleteReview(3L);
+        String review = myPageCustomerService.deleteReview(3L);
         System.out.println(review);
     }
 
@@ -231,14 +231,14 @@ class BankCaptureApplicationTests {
                 .time6(1)
                 .time7(1)
                 .build();
-        Schedule schedule = myPageBankerService.checkTime(scheduleDTO);
-        System.out.println(schedule);
+        String result = myPageBankerService.checkTime(scheduleDTO);
+        System.out.println(result);
     }
 
 
     @Test
     void updateFlag(){
-        int review = myPageBankerService.updateFlag(3L);
+        String review = myPageBankerService.updateFlag(3L);
         System.out.println(review);
     }
 

@@ -26,7 +26,7 @@ public interface MyPageCustomerService {
      * @param customerReviewRequestDTO
      * @return Object
      */
-    public int insertReview(CustomerReviewRequestDTO customerReviewRequestDTO);
+    public String insertReview(CustomerReviewRequestDTO customerReviewRequestDTO);
 
     /**
      * /myPage/customer/review
@@ -36,6 +36,6 @@ public interface MyPageCustomerService {
      * @param reservationId
      * @return int
      */
-    public int deleteReview(Long reservationId);
+    public String deleteReview(Long reservationId);
 
 }

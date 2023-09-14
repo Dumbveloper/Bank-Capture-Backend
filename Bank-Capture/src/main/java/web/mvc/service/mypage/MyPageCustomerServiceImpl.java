@@ -29,28 +29,28 @@ public class MyPageCustomerServiceImpl implements MyPageCustomerService{
 
 
     @Override
-    public int insertReview(CustomerReviewRequestDTO customerReviewRequestDTO) {
+    public String insertReview(CustomerReviewRequestDTO customerReviewRequestDTO) {
         Reservation reviewReservation = reservationRep.findById(customerReviewRequestDTO.getReservationId()).orElse(null);
         reviewReservation.setComment(customerReviewRequestDTO.getBankerReviewComment());
         reviewReservation.setBankerStarRating(customerReviewRequestDTO.getBankerStarRating());
         reviewReservation.setBankStarRating(customerReviewRequestDTO.getBankStarRating());
         Reservation result = reservationRep.save(reviewReservation);
         if(result ==null)
-            return 0;
+            return "fail";
 
-        return 1;
+        return "success";
     }
 
     @Override
-    public int deleteReview(Long reservationId) {
+    public String deleteReview(Long reservationId) {
         Reservation reviewReservation = reservationRep.findById(reservationId).orElse(null);
         reviewReservation.setComment(null);
         reviewReservation.setBankStarRating(0);
         reviewReservation.setBankerStarRating(0);
         Reservation result = reservationRep.save(reviewReservation);
         if(result ==null)
-            return 0;
+            return "fail";
 
-        return 1;
+        return "success";
     }
 }

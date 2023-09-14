@@ -40,12 +40,12 @@ public class ReservationServiceImpl implements ReservationService{
     private ScheduleRepository scheduleRepository;
 
     @Autowired
-    private BankRepository bankRep;
+    private BankRepository bankRepository;
 
     //@Override
     public List<BankDTO> findBankAll() {
         List<BankDTO> bankdtolist = new ArrayList<>();
-        List<Map<String, Object>> bankmaplist = bankRep.findDistinctAvgStar();
+        List<Map<String, Object>> bankmaplist = bankRepository.findDistinctAvgStar();
 
         for (Map<String, Object> b : bankmaplist) {
             Long bankId = ((BigInteger) b.get("bank_id")).longValue();
@@ -177,7 +177,10 @@ public class ReservationServiceImpl implements ReservationService{
         Customer customer = customerRepository.findById(reservationDTO.getCustomerId()).orElse(null);
         Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
         Task task = taskRepository.findById(reservationDTO.getTaskId()).orElse(null);
-        Bank bank = bankRep.findById(reservationDTO.getBankId()).orElse(null);
+        Bank bank = bankRepository.findById(reservationDTO.getBankId()).orElse(null);
+
+
+
 
         Reservation reservation = Reservation.builder().
                 customer(customer).
@@ -269,8 +272,8 @@ public class ReservationServiceImpl implements ReservationService{
           QSchedule qSchedule = QSchedule.schedule;
           Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
           Task task = taskRepository.findById(reservationDTO.getTaskId()).orElse(null);
-          Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
-
+          Banker afterBanker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
+          Banker beforeBanker = bankerRepository.findById(reservation.getBanker().getBankerId()).orElse(null);
           //기존예약 시간번호 앞에 "time"을 붙임
           String openTime = "time" + reservation.getReservationTime();
 
@@ -278,7 +281,7 @@ public class ReservationServiceImpl implements ReservationService{
           reservation.setReservationFinishFlag(reservationDTO.getReservationFinishFlag());
           reservation.setReservationTime(reservationDTO.getReservationTime());
           reservation.setTask(task);
-          reservation.setBanker(banker);
+          reservation.setBanker(afterBanker);
 
 
         //신규예약 시간번호 앞에 "time"을 붙임
@@ -300,16 +303,16 @@ public class ReservationServiceImpl implements ReservationService{
         Long updateOpen = jpaQueryFactory
                 .update(qSchedule)
                 .set((Path<Long>)openColumnPath, 1L)
-                .where(qSchedule.banker.eq(banker), qSchedule.scheduleDate.eq(reservation.getReservationDate()))
+                .where(qSchedule.banker.eq(beforeBanker), qSchedule.scheduleDate.eq(reservation.getReservationDate()))
                 .execute();
 
         Long updateClose = jpaQueryFactory
                 .update(qSchedule)
                 .set((Path<Long>)closeColumnPath, 0L)
-                .where(qSchedule.banker.eq(banker), qSchedule.scheduleDate.eq(reservationDTO.getReservationDate()))
+                .where(qSchedule.banker.eq(afterBanker), qSchedule.scheduleDate.eq(reservationDTO.getReservationDate()))
                 .execute();
 
-        if(updateOpen == 1 && updateClose == 1){
+        if(updateOpen == 1L && updateClose == 1L){
             return "success";
         }
 

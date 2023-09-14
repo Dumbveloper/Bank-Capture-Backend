@@ -45,7 +45,7 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
     }
 
     @Override
-    public Schedule checkTime(ScheduleDTO scheduleDTO) {
+    public String checkTime(ScheduleDTO scheduleDTO) {
         Banker insertBanker = bankerRep.findById(scheduleDTO.getBankerId()).orElse(null);
         Bank insertBank = bankRep.findById(scheduleDTO.getBankId()).orElse(null);
         Schedule insertSchedule = Schedule.builder()
@@ -59,20 +59,17 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
                 .time5(scheduleDTO.getTime5())
                 .time6(scheduleDTO.getTime6())
                 .time7(scheduleDTO.getTime7()).build();
-        Schedule result = scheduleRep.save(insertSchedule);
+        scheduleRep.save(insertSchedule);
 
-        return result;
+        return "success";
     }
 
     @Override
-    public int updateFlag(Long reservationId) {
+    public String updateFlag(Long reservationId) {
         Reservation reviewReservation = reservationRep.findById(reservationId).orElse(null);
         reviewReservation.setReservationFinishFlag("T");
-        Reservation result = reservationRep.save(reviewReservation);
-        if(result == null)
-            return 0;
+        reservationRep.save(reviewReservation);
 
-        return 1;
-
+        return "success";
     }
 }

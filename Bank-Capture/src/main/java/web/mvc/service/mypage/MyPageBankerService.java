@@ -37,13 +37,13 @@ public interface MyPageBankerService {
      *
      * @return Object
      */
-    Schedule checkTime(ScheduleDTO scheduleDTO);
+    String checkTime(ScheduleDTO scheduleDTO);
 
     /**
      * /myPage/banker/schedule/done
      * 마이페이지(행원) - 방문완료 체크
      * reservation_id
      */
-    int updateFlag(Long reservationId);
+    String updateFlag(Long reservationId);
 
 }
