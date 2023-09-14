@@ -18,11 +18,11 @@ public class BankerCertification {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bankerId")
-    private Banker banker;  // 행원 ID
+    private Banker banker;  // 행원
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "certificationId")
-    private Certification certification;  // 자격증 ID
+    private Certification certification;  // 자격증
 
 
 

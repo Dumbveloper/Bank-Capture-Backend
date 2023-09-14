@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+//test
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,5 @@ public class Bank {
     private double locationY; // 지점Y좌표
     private String bankPhone; // 지점전화번호
     private String bankAddr; // 지점주소
-
 }
 

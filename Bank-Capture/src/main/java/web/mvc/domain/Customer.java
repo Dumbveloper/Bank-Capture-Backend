@@ -17,9 +17,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;  //고객 ID
     private String customerName;  // 고객 이름
-    private String email;  // 고객 이메일
-    private String password;  //고객 비밀번호
+    private String customerEmail;  // 고객 이메일
+    private String customerPassword;  //고객 비밀번호
     private String customerPhone;  //고객 전화번호
-
 
 }
