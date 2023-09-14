@@ -47,6 +47,6 @@ public interface BankerRepository extends JpaRepository<Banker,Long> {
      * @param bankId
      * @return List <BankerRankingResponseDTO>
      */
-    @Query("SELECT NEW web.mvc.dto.mypage.BankerRankingResponseDTO(b.bankerName, b.bankerImgPath) FROM BankerRating br JOIN br.banker b WHERE br.bankId = :bankId ORDER BY br.avgStar desc")
-    Page<BankerRankingResponseDTO> findBankerRankingByBankId(@Param("bankId") Long bankId, Pageable pageable);
+//    @Query("SELECT NEW web.mvc.dto.mypage.BankerRankingResponseDTO(b.bankerName, b.bankerImgPath) FROM BankerRating br JOIN br.banker b WHERE br.bankId = :bankId ORDER BY br.avgStar desc")
+//    Page<BankerRankingResponseDTO> findBankerRankingByBankId(@Param("bankId") Long bankId, Pageable pageable);
 }

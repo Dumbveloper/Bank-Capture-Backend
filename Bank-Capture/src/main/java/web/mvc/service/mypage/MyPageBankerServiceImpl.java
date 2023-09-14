@@ -41,7 +41,7 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
     @Override
     public Page<BankerRankingResponseDTO> bankerRanking(Long bankId,int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return bankerRep.findBankerRankingByBankId(bankId, pageable);
+        return null;//bankerRep.findBankerRankingByBankId(bankId, pageable);
     }
 
     @Override

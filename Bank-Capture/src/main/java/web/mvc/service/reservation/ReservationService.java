@@ -26,7 +26,7 @@ public interface ReservationService {
      * @param taskId
      * @return List<BankerAllResponseDTO>
      */
-    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId);
+//    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId);
 
     /**
      * /reservation/bankerinfo/
