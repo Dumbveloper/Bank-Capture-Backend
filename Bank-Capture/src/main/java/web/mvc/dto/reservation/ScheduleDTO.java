@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 /**
  * /myPage/banker/checktime
  * 마이페이지(행원) - 예약가능한 시간 체크

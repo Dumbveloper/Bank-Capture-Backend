@@ -156,11 +156,12 @@ public class ReservationServiceImpl implements ReservationService{
         ).collect(Collectors.toList());
 
         /**
-         * bankerId에 해당하는 리뷰 리스트 조회
+         * bankerId에 해당하는 리뷰리스트, 레뷰 별 별점, 예약 날짜, 예약ID 조회
          */
 
         List<BankerReviewDTO> reDto = jpaQueryFactory.select(Projections.constructor(
-                        BankerReviewDTO.class,reservation.comment))
+                        BankerReviewDTO.class,reservation.reservationId,reservation.reservationDate
+                        ,reservation.bankerStarRating,reservation.comment))
                 .from(reservation)
                 .where(reservation.banker.bankerId.eq(bankerId))
                 .fetch();
