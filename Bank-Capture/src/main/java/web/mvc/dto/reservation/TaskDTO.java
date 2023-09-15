@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 /**
  * /reservation/bankerAll
  * 예약하기 - 예약가능한 행원 조회

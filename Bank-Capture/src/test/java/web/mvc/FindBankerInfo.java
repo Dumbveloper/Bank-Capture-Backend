@@ -34,7 +34,7 @@ class FindBankerInfo {
                 .from(banker)
                 .join(bankerCertification).on(banker.bankerId.eq(bankerCertification.banker.bankerId))
                 .join(certification).on(bankerCertification.certification.certificationId.eq(certification.certificationId))
-                .where(banker.bankerId.eq(1L))
+                .where(banker.bankerId.eq(3L))
                 .fetch();
 
         /**
@@ -51,9 +51,10 @@ class FindBankerInfo {
          */
 
         List<BankerReviewDTO> reDto = jpaQueryFactory.select(Projections.constructor(
-                        BankerReviewDTO.class,reservation.comment))
+                        BankerReviewDTO.class,reservation.reservationId,reservation.reservationDate
+                        ,reservation.bankerStarRating,reservation.comment))
                 .from(reservation)
-                .where(reservation.banker.bankerId.eq(1L))
+                .where(reservation.banker.bankerId.eq(3L))
                 .fetch();
 
 
