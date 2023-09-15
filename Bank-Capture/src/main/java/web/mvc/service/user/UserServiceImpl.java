@@ -7,6 +7,8 @@ import web.mvc.domain.Customer;
 import web.mvc.dto.users.BankerLoginRequestDTO;
 import web.mvc.dto.users.CustomerDTO;
 import web.mvc.dto.users.CustomerLoginRequestDTO;
+import web.mvc.exception.CustomException;
+import web.mvc.exception.ErrorCode;
 import web.mvc.repository.BankerRepository;
 import web.mvc.repository.CustomerRepository;
 
@@ -24,7 +26,7 @@ public class UserServiceImpl implements UserService{
 
         //해당하는 회원이 있는지 체크
         if(customerRepository.findByCustomerEmail(customerLoginRequestDTO.getEmail()) == null)
-            throw new RuntimeException("일치하는 회원이 없습니다.");
+            throw new CustomException(ErrorCode.INVALID_Customer_Login);
 
 
 
@@ -34,7 +36,7 @@ public class UserServiceImpl implements UserService{
 
         //비밀번호 일치여부 체크
         if(customer == null)
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.INVALID_Customer_Password);
 
         return "success";
 
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService{
 
         ////해당하는 회원이 있는지 체크
         if(bankerRepository.findByBankerEmail(bankerLoginRequestDTO.getEmail()) == null) {
-            throw new RuntimeException("일치하는 회원이 없습니다.");
+            throw new CustomException(ErrorCode.INVALID_BANKER_Login);
         }
 
         Banker banker =bankerRepository.
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService{
 
         //비밀번호 일치여부 체크
         if(banker == null) {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.INVALID_BANKER_Password);
         }
 
         return "success";
@@ -65,7 +67,7 @@ public class UserServiceImpl implements UserService{
 
         //이메일 중복여부 체크
         if(customerRepository.findByCustomerEmail(customerDTO.getCustomerEmail()) != null) {
-            throw new RuntimeException("중복된 이메일입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_CUSTOMER);
         }
 
         Customer customer = Customer.builder().
