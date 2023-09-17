@@ -2,10 +2,7 @@ package web.mvc.controller.reservation;
 
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.reservation.BankDTO;
 import web.mvc.dto.reservation.BankerAllResponseDTO;
 import web.mvc.dto.reservation.BankerInfoResponseDTO;
@@ -28,7 +25,7 @@ public class ReservationController {
             @ApiResponse(code = 200, message = "조회 성공"),
             @ApiResponse(code = 500, message = "에러")
     })
-    @PostMapping("/")
+    @GetMapping("/")
     public List<BankDTO> findBankAll(){
         return reservationService.findBankAll();
     }
@@ -38,8 +35,8 @@ public class ReservationController {
             @ApiResponse(code = 200, message = "조회 성공"),
             @ApiResponse(code = 500, message = "에러")
     })
-    @PostMapping("/bankerAll")
-    public List<BankerAllResponseDTO> findBankerAll(Long bankId, Long taskId){
+    @GetMapping("/bankerAll")
+    public List<BankerAllResponseDTO> findBankerAll(@RequestParam Long bankId, @RequestParam Long taskId){
         return reservationService.findBankerAll(bankId, taskId);
     }
 
@@ -48,8 +45,8 @@ public class ReservationController {
             @ApiResponse(code = 200, message = "조회 성공"),
             @ApiResponse(code = 500, message = "에러")
     })
-    @PostMapping("/bankerInfo")
-    public BankerInfoResponseDTO findBankerInfo(Long bankerId){
+    @GetMapping("/bankerInfo")
+    public BankerInfoResponseDTO findBankerInfo(@RequestParam Long bankerId){
         return reservationService.findBankerInfo(bankerId);
     }
 
