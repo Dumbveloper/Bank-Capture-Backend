@@ -285,6 +285,7 @@ public class ReservationServiceImpl implements ReservationService{
           reservation.setReservationTime(reservationDTO.getReservationTime());
           reservation.setTask(task);
           reservation.setBanker(afterBanker);
+          reservation.setReservationFinishFlag("F");
 
 
         //신규예약 시간번호 앞에 "time"을 붙임
