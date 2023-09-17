@@ -14,7 +14,9 @@ import javax.persistence.*;
         "    count(reservation.comment) as cnt_comment\n" +
         "from\n" +
         "    test.reservation\n" +
-        "    group by bank_id,banker_id")
+        "WHERE\n" +
+        "    banker_star_rating > 0\n" +
+        "Group by bank_id,banker_id;")
 @Immutable
 @Getter
 @Setter
