@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import web.mvc.domain.Banker;
 import web.mvc.domain.Customer;
-import web.mvc.dto.users.BankerLoginRequestDTO;
-import web.mvc.dto.users.CustomerDTO;
-import web.mvc.dto.users.CustomerLoginRequestDTO;
+import web.mvc.dto.users.*;
 import web.mvc.exception.CustomException;
 import web.mvc.exception.ErrorCode;
 import web.mvc.repository.BankerRepository;
@@ -22,12 +20,11 @@ public class UserServiceImpl implements UserService{
     private BankerRepository bankerRepository;
 
     @Override
-    public String customerLogin(CustomerLoginRequestDTO customerLoginRequestDTO ) {
+    public CustomerLoginResponseDTO customerLogin(CustomerLoginRequestDTO customerLoginRequestDTO ) {
 
         //해당하는 회원이 있는지 체크
         if(customerRepository.findByCustomerEmail(customerLoginRequestDTO.getEmail()) == null)
             throw new CustomException(ErrorCode.INVALID_Customer_Login);
-
 
 
         Customer customer = customerRepository.
@@ -38,12 +35,14 @@ public class UserServiceImpl implements UserService{
         if(customer == null)
             throw new CustomException(ErrorCode.INVALID_Customer_Password);
 
-        return "success";
+        CustomerLoginResponseDTO customerLoginResponseDTO = new CustomerLoginResponseDTO(customer.getCustomerId(), customer.getCustomerName());
+
+        return customerLoginResponseDTO;
 
     }
 
     @Override
-    public String bankerLogin(BankerLoginRequestDTO bankerLoginRequestDTO) {
+    public BankerLoginResponseDTO bankerLogin(BankerLoginRequestDTO bankerLoginRequestDTO) {
 
         ////해당하는 회원이 있는지 체크
         if(bankerRepository.findByBankerEmail(bankerLoginRequestDTO.getEmail()) == null) {
@@ -58,8 +57,9 @@ public class UserServiceImpl implements UserService{
         if(banker == null) {
             throw new CustomException(ErrorCode.INVALID_BANKER_Password);
         }
+        BankerLoginResponseDTO bankerLoginResponseDTO = new BankerLoginResponseDTO(banker.getBankerId(), banker.getBankerName());
 
-        return "success";
+        return bankerLoginResponseDTO;
     }
 
     @Override
