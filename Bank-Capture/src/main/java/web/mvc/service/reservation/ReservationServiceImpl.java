@@ -175,7 +175,7 @@ public class ReservationServiceImpl implements ReservationService{
     }
     @Override
     @Transactional
-    public String doReservation(ReservationDTO reservationDTO, Long reservationId) {
+    public String doReservation(ReservationDTO reservationDTO) {
 
         Customer customer = customerRepository.findById(reservationDTO.getCustomerId()).orElse(null);
         Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);

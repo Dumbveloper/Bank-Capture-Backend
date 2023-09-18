@@ -24,6 +24,4 @@ public class BankerCertification {
     @JoinColumn(name = "certificationId")
     private Certification certification;  // 자격증
 
-
-
 }

@@ -62,7 +62,7 @@ public class ReservationController {
         Long reservationId = reservationDTO.getReservationId();
 
         if(reservationId == null){
-            return reservationService.doReservation(reservationDTO, reservationId);
+            return reservationService.doReservation(reservationDTO);
         }
 
         return reservationService.changeReservation(reservationDTO, reservationId);

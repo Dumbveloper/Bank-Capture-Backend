@@ -71,7 +71,7 @@ public class ReservationTest {
         ReservationDTO reservationDTO =
                 new ReservationDTO(1L, 1L, 1L, 1L,"20230928", "7", "F");
         //when
-        String result = reservationService.doReservation(reservationDTO, null);
+        String result = reservationService.doReservation(reservationDTO);
         //then
         assertEquals("success",result); // 예약하기
     }

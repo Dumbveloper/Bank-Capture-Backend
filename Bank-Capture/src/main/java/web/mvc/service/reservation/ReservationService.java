@@ -49,7 +49,7 @@ public interface ReservationService {
      * @param reservationDTO
      * @return String 성공여부
      */
-    public String doReservation(ReservationDTO reservationDTO, Long reservationId);
+    public String doReservation(ReservationDTO reservationDTO);
 
     /**
      * 예약취소
