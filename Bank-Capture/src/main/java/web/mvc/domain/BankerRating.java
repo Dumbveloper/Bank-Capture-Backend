@@ -13,8 +13,10 @@ import javax.persistence.*;
         "    ROUND(AVG(banker_star_rating),2) AS avg_star,\n" +
         "    count(reservation.comment) as cnt_comment\n" +
         "from\n" +
-        "    test.reservation\n" +
-        "    group by bank_id,banker_id")
+        "    reservation\n" +
+        "WHERE\n" +
+        "    banker_star_rating > 0\n" +
+        "Group by bank_id,banker_id")
 @Immutable
 @Getter
 @Setter

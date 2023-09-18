@@ -89,8 +89,9 @@ public class ReservationServiceImpl implements ReservationService{
                 .from(banker)
                 .join(mainTask).on(banker.bankerId.eq(mainTask.banker.bankerId))
                 .join(task).on(task.taskId.eq(mainTask.task.taskId))
-                .join(bankerRating).on(bankerRating.bankerId.eq(banker.bankerId))
+                .leftJoin(bankerRating).on(bankerRating.bankerId.eq(banker.bankerId))
                 .where(banker.bank.bankId.eq(bankId).and(task.taskId.eq(taskId)))
+                .orderBy(bankerRating.avgStar.desc(),bankerRating.cntComment.desc())
                 .fetch();
 
         /**
@@ -163,7 +164,7 @@ public class ReservationServiceImpl implements ReservationService{
                         BankerReviewDTO.class,reservation.reservationId,reservation.reservationDate
                         ,reservation.bankerStarRating,reservation.comment))
                 .from(reservation)
-                .where(reservation.banker.bankerId.eq(bankerId))
+                .where(reservation.banker.bankerId.eq(bankerId).and(reservation.comment.isNotNull()))
                 .fetch();
 
 
