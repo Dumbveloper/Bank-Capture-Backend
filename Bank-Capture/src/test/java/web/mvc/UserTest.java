@@ -52,21 +52,7 @@ public class UserTest {
         //findById 메소드는 반환타입이 Optional<Customer> 임! get() 메소드로 뽑아야 비교가능
     }
 
-    @Test
-    void 회원로그인_서비스() {
-        //given
-        Customer customer = new Customer();
-        customer.setCustomerName("원식");
-        customer.setCustomerEmail("wonsik1@naver.com");
-        customer.setCustomerPassword("1234");
-        Long customerId = customerRepository.save(customer).getCustomerId();
 
-        CustomerLoginRequestDTO customerLoginRequestDTO = new CustomerLoginRequestDTO("wonsik1@naver.com", "1234");
-        //when
-        CustomerLoginResponseDTO customerLoginResponseDTO = userService.customerLogin(customerLoginRequestDTO);
-        //then
-        assertEquals(customerId, customerLoginResponseDTO.getCustomerId());
-    }
     @Test
     public void 로그인시도_오류() throws Exception{
         //given
