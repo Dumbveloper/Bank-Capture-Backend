@@ -91,6 +91,7 @@ public class ReservationServiceImpl implements ReservationService{
                 .join(task).on(task.taskId.eq(mainTask.task.taskId))
                 .leftJoin(bankerRating).on(bankerRating.bankerId.eq(banker.bankerId))
                 .where(banker.bank.bankId.eq(bankId).and(task.taskId.eq(taskId)))
+                .orderBy(bankerRating.avgStar.desc(),bankerRating.cntComment.desc())
                 .fetch();
 
         /**
