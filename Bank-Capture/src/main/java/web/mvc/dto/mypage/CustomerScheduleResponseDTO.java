@@ -14,6 +14,7 @@ import lombok.*;
  */
 public class CustomerScheduleResponseDTO {
     private Long reservationId;  // 예약 iD
+    private Long bankId;  // 지점 iD
     private String bankName; // 지점이름
     private String bankAddr; // 지점주소
     private String reservationDate;  // 예약 날짜
