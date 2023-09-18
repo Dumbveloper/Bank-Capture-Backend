@@ -66,7 +66,7 @@ public class BankerResist {
 
         for(int i=1;i<100;i++) {
             long randomNumber = (long) (random.nextDouble() * Math.pow(10, 8));
-            CustomerDTO customerDTO=CustomerDTO.builder().customerName("Customer"+i).customerEmail("customer"+i+"kbbank.com").
+            CustomerDTO customerDTO=CustomerDTO.builder().customerName("Customer"+i).customerEmail("customer"+i+"@kbbank.com").
                     customerPassword("password"+i).customerPhone("010"+String.format("%08d", randomNumber)).build();
             userService.register(customerDTO);
         }
