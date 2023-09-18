@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import web.mvc.domain.Banker;
 import web.mvc.domain.Customer;
 import web.mvc.dto.users.*;
+import web.mvc.encryption.EncryptHelper;
 import web.mvc.exception.CustomException;
 import web.mvc.exception.ErrorCode;
 import web.mvc.repository.BankerRepository;
@@ -15,27 +16,27 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     private CustomerRepository customerRepository;
-
     @Autowired
     private BankerRepository bankerRepository;
+    @Autowired
+    private EncryptHelper encryptHelper;
 
     @Override
     public CustomerLoginResponseDTO customerLogin(CustomerLoginRequestDTO customerLoginRequestDTO ) {
 
         //해당하는 회원이 있는지 체크
-        if(customerRepository.findByCustomerEmail(customerLoginRequestDTO.getEmail()) == null)
+        Customer byCustomerEmail = customerRepository.findByCustomerEmail(customerLoginRequestDTO.getEmail());
+        if(byCustomerEmail == null)
             throw new CustomException(ErrorCode.INVALID_Customer_Login);
 
-
-        Customer customer = customerRepository.
-                                findByCustomerEmailAndCustomerPassword(customerLoginRequestDTO.getEmail(),
-                                customerLoginRequestDTO.getPassword());
+        String encrypted = byCustomerEmail.getCustomerPassword(); // pwd 암호화되어 저장되어 있음
+        boolean result = encryptHelper.isMatch(customerLoginRequestDTO.getPassword(), encrypted);
 
         //비밀번호 일치여부 체크
-        if(customer == null)
+        if(!result)
             throw new CustomException(ErrorCode.INVALID_Customer_Password);
 
-        CustomerLoginResponseDTO customerLoginResponseDTO = new CustomerLoginResponseDTO(customer.getCustomerId(), customer.getCustomerName());
+        CustomerLoginResponseDTO customerLoginResponseDTO = new CustomerLoginResponseDTO(byCustomerEmail.getCustomerId(), byCustomerEmail.getCustomerName());
 
         return customerLoginResponseDTO;
 
@@ -45,19 +46,20 @@ public class UserServiceImpl implements UserService{
     public BankerLoginResponseDTO bankerLogin(BankerLoginRequestDTO bankerLoginRequestDTO) {
 
         ////해당하는 회원이 있는지 체크
-        if(bankerRepository.findByBankerEmail(bankerLoginRequestDTO.getEmail()) == null) {
+        Banker byBankerEmail = bankerRepository.findByBankerEmail(bankerLoginRequestDTO.getEmail());
+        if(byBankerEmail == null) {
             throw new CustomException(ErrorCode.INVALID_BANKER_Login);
         }
 
-        Banker banker =bankerRepository.
-                findByBankerEmailAndBankerPassword(bankerLoginRequestDTO.getEmail(),
-                        bankerLoginRequestDTO.getPassword());
+        String encrypted = byBankerEmail.getBankerPassword();
+        boolean result = encryptHelper.isMatch(bankerLoginRequestDTO.getPassword(), encrypted);
+
 
         //비밀번호 일치여부 체크
-        if(banker == null) {
+        if(!result) {
             throw new CustomException(ErrorCode.INVALID_BANKER_Password);
         }
-        BankerLoginResponseDTO bankerLoginResponseDTO = new BankerLoginResponseDTO(banker.getBankerId(), banker.getBankerName());
+        BankerLoginResponseDTO bankerLoginResponseDTO = new BankerLoginResponseDTO(byBankerEmail.getBankerId(), byBankerEmail.getBankerName());
 
         return bankerLoginResponseDTO;
     }
@@ -69,6 +71,11 @@ public class UserServiceImpl implements UserService{
         if(customerRepository.findByCustomerEmail(customerDTO.getCustomerEmail()) != null) {
             throw new CustomException(ErrorCode.DUPLICATE_CUSTOMER);
         }
+
+        //회원가입 비밀번호 암호화
+        String dtoPassword = customerDTO.getCustomerPassword(); // dto 비밀번호 꺼내서 암호화
+        String encrypted = encryptHelper.encrypt(dtoPassword);
+        customerDTO.setCustomerPassword(encrypted);
 
         Customer customer = Customer.builder().
                 customerEmail(customerDTO.getCustomerEmail()).

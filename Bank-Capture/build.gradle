@@ -49,6 +49,9 @@ dependencies {
     // querydsl 이놈
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    //Bcrypt 암호화 의존성
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
 }
 
 tasks.named('test') {
