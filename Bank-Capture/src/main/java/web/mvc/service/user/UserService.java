@@ -38,4 +38,10 @@ public interface UserService {
     public String register(CustomerDTO customerDTO);
 
 
+    /**
+     * 행원 회원가입
+     * @param bankerDTO
+     * @return
+     */
+    String registerBanker(BankerDTO bankerDTO);
 }

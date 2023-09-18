@@ -2,14 +2,18 @@ package web.mvc.service.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import web.mvc.domain.Bank;
 import web.mvc.domain.Banker;
 import web.mvc.domain.Customer;
 import web.mvc.dto.users.*;
 import web.mvc.encryption.EncryptHelper;
 import web.mvc.exception.CustomException;
 import web.mvc.exception.ErrorCode;
+import web.mvc.repository.BankRepository;
 import web.mvc.repository.BankerRepository;
 import web.mvc.repository.CustomerRepository;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -18,6 +22,8 @@ public class UserServiceImpl implements UserService{
     private CustomerRepository customerRepository;
     @Autowired
     private BankerRepository bankerRepository;
+    @Autowired
+    private BankRepository bankRepository;
     @Autowired
     private EncryptHelper encryptHelper;
 
@@ -59,7 +65,8 @@ public class UserServiceImpl implements UserService{
         if(!result) {
             throw new CustomException(ErrorCode.INVALID_BANKER_Password);
         }
-        BankerLoginResponseDTO bankerLoginResponseDTO = new BankerLoginResponseDTO(byBankerEmail.getBankerId(), byBankerEmail.getBankerName());
+
+        BankerLoginResponseDTO bankerLoginResponseDTO = new BankerLoginResponseDTO(byBankerEmail.getBankerId(),byBankerEmail.getBank().getBankId() ,byBankerEmail.getBankerName());
 
         return bankerLoginResponseDTO;
     }
@@ -86,6 +93,40 @@ public class UserServiceImpl implements UserService{
 
         //회원가입
         customerRepository.save(customer);
+
+        return "success";
+
+    }
+
+    @Override
+    public String registerBanker(BankerDTO bankerDTO) {
+
+
+        //이메일 중복여부 체크
+        if(bankerRepository.findByBankerEmail(bankerDTO.getBankerEmail()) != null) {
+            throw new CustomException(ErrorCode.DUPLICATE_CUSTOMER);
+        }
+
+        //회원가입 비밀번호 암호화
+        String dtoPassword = bankerDTO.getBankerPassword(); // dto 비밀번호 꺼내서 암호화
+        String encrypted = encryptHelper.encrypt(dtoPassword);
+        bankerDTO.setBankerPassword(encrypted);
+
+        Optional<Bank> bank = bankRepository.findById(bankerDTO.getBankerBankId());
+
+        Banker banker = Banker.builder().
+                bank(bank.get()).
+                bankerName(bankerDTO.getBankerName()).
+                bankerEmail(bankerDTO.getBankerEmail()).
+                bankerPassword(bankerDTO.getBankerPassword()).
+                bankerCareer(bankerDTO.getBankerCareer()).
+                bankerImgPath(bankerDTO.getBankerImgPath()).
+                bankerInfo(bankerDTO.getBankerInfo()).
+                bankerReviewFlag(bankerDTO.getBankerReviewFlag()).
+                build();
+
+        //회원가입
+        bankerRepository.save(banker);
 
         return "success";
 
