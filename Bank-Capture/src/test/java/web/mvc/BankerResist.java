@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import web.mvc.domain.Bank;
 import web.mvc.domain.Banker;
 import web.mvc.dto.users.BankerDTO;
+import web.mvc.dto.users.CustomerDTO;
 import web.mvc.repository.BankRepository;
 import web.mvc.repository.BankerRepository;
 import web.mvc.service.user.UserService;
@@ -37,9 +38,10 @@ public class BankerResist {
         // 랜덤한 숫자 생성 (예: 1부터 30까지의 범위에서)
         int minCareer = 1;
         int maxCareer = 30;
-        int randomCareer = random.nextInt(maxCareer - minCareer + 1) + minCareer;
+
         for(int i=1;i<150;i++) {
             long bankerBankId = (i / 10L) + 1L;
+            int randomCareer = random.nextInt(maxCareer - minCareer + 1) + minCareer;
             BankerDTO bankerDTO = BankerDTO.builder().
                     bankerBankId(bankerBankId).
                     bankerName("Banker"+i).
@@ -51,6 +53,22 @@ public class BankerResist {
                     bankerReviewFlag("Y").
                     build();
             userService.registerBanker(bankerDTO);
+        }
+
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void 고객생성() throws Exception{
+        Random random = new Random();
+        // 랜덤한 숫자 생성 (예: 1부터 30까지의 범위에서)
+        // 0.0에서 1.0 미만의 난수를 생성하고 10^8을 곱한 후 정수로 변환
+
+        for(int i=1;i<100;i++) {
+            long randomNumber = (long) (random.nextDouble() * Math.pow(10, 8));
+            CustomerDTO customerDTO=CustomerDTO.builder().customerName("Customer"+i).customerEmail("customer"+i+"kbbank.com").
+                    customerPassword("password"+i).customerPhone("010"+String.format("%08d", randomNumber)).build();
+            userService.register(customerDTO);
         }
 
     }
