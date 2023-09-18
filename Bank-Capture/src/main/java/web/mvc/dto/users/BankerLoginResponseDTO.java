@@ -14,5 +14,6 @@ import lombok.*;
  */
 public class BankerLoginResponseDTO {
     private Long bankerId;
+    private Long bankId;
     private String bankerName;
 }
