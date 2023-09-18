@@ -22,17 +22,17 @@ import java.util.List;
 @Service
 public class MyPageBankerServiceImpl implements MyPageBankerService{
     @Autowired
-    private ReservationRepository reservationRep;
+    private ReservationRepository reservationRepository;
     @Autowired
-    private BankerRepository bankerRep;
+    private BankerRepository bankerRepository;
     @Autowired
-    private BankRepository bankRep;
+    private BankRepository bankRepository;
     @Autowired
-    private ScheduleRepository scheduleRep;
+    private ScheduleRepository scheduleRepository;
 
     @Override
     public List<BankerScheduleResponseDTO> bankerSchedule(Long bankerId) {
-        List<BankerScheduleResponseDTO> list = reservationRep.findReservationDetailsByBankerId(bankerId);
+        List<BankerScheduleResponseDTO> list = reservationRepository.findReservationDetailsByBankerId(bankerId);
         return list;
     }
 
@@ -41,13 +41,13 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
     @Override
     public Page<BankerRankingResponseDTO> bankerRanking(Long bankId,int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        return bankerRep.findBankerRankingByBankId(bankId, pageable);
+        return bankerRepository.findBankerRankingByBankId(bankId, pageable);
     }
 
     @Override
     public String checkTime(ScheduleDTO scheduleDTO) {
-        Banker insertBanker = bankerRep.findById(scheduleDTO.getBankerId()).orElse(null);
-        Bank insertBank = bankRep.findById(scheduleDTO.getBankId()).orElse(null);
+        Banker insertBanker = bankerRepository.findById(scheduleDTO.getBankerId()).orElse(null);
+        Bank insertBank = bankRepository.findById(scheduleDTO.getBankId()).orElse(null);
         Schedule insertSchedule = Schedule.builder()
                 .banker(insertBanker)
                 .bank(insertBank)
@@ -59,16 +59,16 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
                 .time5(scheduleDTO.getTime5())
                 .time6(scheduleDTO.getTime6())
                 .time7(scheduleDTO.getTime7()).build();
-        scheduleRep.save(insertSchedule);
+        scheduleRepository.save(insertSchedule);
 
         return "success";
     }
 
     @Override
     public String updateFlag(Long reservationId) {
-        Reservation reviewReservation = reservationRep.findById(reservationId).orElse(null);
+        Reservation reviewReservation = reservationRepository.findById(reservationId).orElse(null);
         reviewReservation.setReservationFinishFlag("T");
-        reservationRep.save(reviewReservation);
+        reservationRepository.save(reviewReservation);
 
         return "success";
     }
