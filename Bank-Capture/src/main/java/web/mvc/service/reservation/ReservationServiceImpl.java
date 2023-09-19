@@ -1,15 +1,36 @@
 package web.mvc.service.reservation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import web.mvc.domain.*;
 import web.mvc.dto.reservation.*;
+import web.mvc.dto.sms.MessageDTO;
+import web.mvc.dto.sms.SmsRequestDTO;
+import web.mvc.dto.sms.SmsResponseDTO;
 import web.mvc.repository.*;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +38,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImpl implements ReservationService{
+    @Value("${naver-cloud-sms.accessKey}")
+    private String accessKey;
+
+    @Value("${naver-cloud-sms.secretKey}")
+    private String secretKey;
+
+    @Value("${naver-cloud-sms.serviceId}")
+    private String serviceId;
+
+    @Value("${naver-cloud-sms.senderPhone}")
+    private String phone;
 
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
@@ -181,7 +213,7 @@ public class ReservationServiceImpl implements ReservationService{
     }
     @Override
     @Transactional
-    public String doReservation(ReservationDTO reservationDTO) {
+    public String doReservation(ReservationDTO reservationDTO)throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
         Customer customer = customerRepository.findById(reservationDTO.getCustomerId()).orElse(null);
         Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
@@ -227,6 +259,26 @@ public class ReservationServiceImpl implements ReservationService{
                 .set((Path<Long>)columnPath, 0L)
                 .where(qSchedule.banker.eq(banker), qSchedule.scheduleDate.eq(reservationDTO.getReservationDate()))
                 .execute();
+        String resDate =reservation.getReservationDate();
+        String reservationYear = resDate.substring(0,4);
+        String reservationMonth = resDate.substring(4,6);
+        String reservationDay = resDate.substring(6,8);
+
+        String message = new StringBuilder()
+                .append("KB BankCapture 예약완료 \n\n")
+                .append(customer.getCustomerName())
+                .append("님 \n KB BankCapture 지점 방문 예약이 완료되었습니다.\n\n")
+                .append("  지점명 : ").append(bank.getBankName())
+                .append("\n  예약날짜 : ").append(reservationYear).append("년 ")
+                .append(reservationMonth).append("월 ").append(reservationDay).append("일")
+                .append("\n  예약 시간 : ").append((Integer.parseInt(reservation.getReservationTime())+9)).append("시")
+                .append("\n  예약 행원 : ").append(banker.getBankerName())
+                .append("\n  예약 업무 : ").append(task.getTaskName())
+                .append("\n\n해당 업무에 필요한 서류를 아래 링크에서 확인하신 후, 필요서류를 구비하여 방문하시는 것을 추천드립니다.\n")
+                .append("https://obank.kbstar.com/quics?page=C020003#loading")
+                .toString();
+        MessageDTO messageDto = MessageDTO.builder().to(customer.getCustomerPhone()).subject("KB BankCapture 방문예약 완료").content(message).build();
+        sendSms(messageDto);
 
         //업데이트가 성공이면 "success"리턴
         if(update == 1)
@@ -238,12 +290,12 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     @Transactional
-    public String cancelReservation(Long reservationId) {
+    public String cancelReservation(Long reservationId)throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
         QSchedule qSchedule = QSchedule.schedule;
         Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
         Banker banker = bankerRepository.findById(reservation.getBanker().getBankerId()).orElse(null);
-
+        Customer customer = customerRepository.findById(reservation.getCustomer().getCustomerId()).orElse(null);
         //예약 시간번호 앞에 "time"을 붙임
         String time = "time" + reservation.getReservationTime();
 
@@ -264,6 +316,24 @@ public class ReservationServiceImpl implements ReservationService{
                 .set((Path<Long>)columnPath, 1L)
                 .where(qSchedule.banker.eq(banker), qSchedule.scheduleDate.eq(reservation.getReservationDate()))
                 .execute();
+        String resDate =reservation.getReservationDate();
+        String reservationYear = resDate.substring(0,4);
+        String reservationMonth = resDate.substring(4,6);
+        String reservationDay = resDate.substring(6,8);
+
+        String message = new StringBuilder()
+                .append("KB BankCapture 예약취소 \n\n")
+                .append(customer.getCustomerName())
+                .append("님 \n KB BankCapture ")
+                .append(reservationYear).append("년 ")
+                .append(reservationMonth).append("월 ").append(reservationDay).append("일")
+                .append((Integer.parseInt(reservation.getReservationTime())+9)).append("시 ")
+                .append("방문 예약이 취소되었습니다.\n")
+                .append("\n 새로운 방문예약을 원하실 경우, KB Bank Capture 홈페이지를 방문해주세요.\n")
+                .append("http://localhost:8081")
+                .toString();
+        MessageDTO messageDto = MessageDTO.builder().to(customer.getCustomerPhone()).subject("KB Bank Capture 방문예약 취소").content(message).build();
+        sendSms(messageDto);
 
         //업데이트가 성공이면 예약을 삭제하고 "success"리턴
         if(update == 1) {
@@ -276,14 +346,18 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     @Transactional
-    public String changeReservation(ReservationDTO reservationDTO, Long reservationId) {
+    public String changeReservation(ReservationDTO reservationDTO, Long reservationId)throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
           QSchedule qSchedule = QSchedule.schedule;
           Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
           Task task = taskRepository.findById(reservationDTO.getTaskId()).orElse(null);
           Banker afterBanker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
           Banker beforeBanker = bankerRepository.findById(reservation.getBanker().getBankerId()).orElse(null);
-          //기존예약 시간번호 앞에 "time"을 붙임
+          Bank bank = bankRepository.findById(reservation.getBank().getBankId()).orElse(null);
+          Customer customer = customerRepository.findById(reservation.getCustomer().getCustomerId()).orElse(null);
+
+
+        //기존예약 시간번호 앞에 "time"을 붙임
           String openTime = "time" + reservation.getReservationTime();
           String beforeDate = reservation.getReservationDate();
 
@@ -323,11 +397,95 @@ public class ReservationServiceImpl implements ReservationService{
                 .where(qSchedule.banker.eq(afterBanker), qSchedule.scheduleDate.eq(reservationDTO.getReservationDate()))
                 .execute();
 
+        String resDate =reservation.getReservationDate();
+        String reservationYear = resDate.substring(0,4);
+        String reservationMonth = resDate.substring(4,6);
+        String reservationDay = resDate.substring(6,8);
+
+        String message = new StringBuilder()
+                .append("KB BankCapture 예약변경 \n\n")
+                .append(customer.getCustomerName())
+                .append("님 \n KB BankCapture 지점 방문 예약이 변경되었습니다.\n\n")
+                .append("  지점명 : ").append(bank.getBankName())
+                .append("\n  예약날짜 : ").append(reservationYear).append("년 ")
+                .append(reservationMonth).append("월 ").append(reservationDay).append("일")
+                .append("\n  예약 시간 : ").append((Integer.parseInt(reservation.getReservationTime())+9)).append("시")
+                .append("\n  예약 행원 : ").append(afterBanker.getBankerName())
+                .append("\n  예약 업무 : ").append(task.getTaskName())
+                .append("\n\n해당 업무에 필요한 서류를 아래 링크에서 확인하신 후, 필요서류를 구비하여 방문하시는 것을 추천드립니다.\n")
+                .append("https://obank.kbstar.com/quics?page=C020003#loading")
+                .toString();
+
+        MessageDTO messageDto = MessageDTO.builder().to(customer.getCustomerPhone()).subject("KB BankCapture 방문예약 변경").content(message).build();
+        sendSms(messageDto);
+
         if(updateOpen == 1L && updateClose == 1L){
             return "success";
         }
 
         return "fail";
 
+    }
+    public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        Long systime = System.currentTimeMillis();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("x-ncp-apigw-timestamp", systime.toString());
+        headers.set("x-ncp-iam-access-key", accessKey);
+        headers.set("x-ncp-apigw-signature-v2", makeSignature(systime));
+
+        List<MessageDTO> messages = new ArrayList<>();
+        messages.add(messageDto);
+        System.out.println(messages);
+
+        SmsRequestDTO request = SmsRequestDTO.builder()
+                .type("LMS")
+                .contentType("COMM")
+                .countryCode("82")
+                .from(phone)
+                .content("안녕하세요.")
+                .messages(messages)
+                .build();
+        System.out.println(request);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String body = objectMapper.writeValueAsString(request);
+        HttpEntity<String> httpBody = new HttpEntity<>(body, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        SmsResponseDTO response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+ serviceId +"/messages"), httpBody, SmsResponseDTO.class);
+
+        return response;
+    }
+
+    //secretKey 암호화
+    public String makeSignature(Long time) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException {
+        String space = " ";
+        String newLine = "\n";
+        String method = "POST";
+        String url = "/sms/v2/services/"+ this.serviceId+"/messages";
+        String timestamp = time.toString();
+        String accessKey = this.accessKey;
+        String secretKey = this.secretKey;
+
+        String message = new StringBuilder()
+                .append(method)
+                .append(space)
+                .append(url)
+                .append(newLine)
+                .append(timestamp)
+                .append(newLine)
+                .append(accessKey)
+                .toString();
+
+        SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
+        Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(signingKey);
+
+        byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
+        String encodeBase64String = Base64.encodeBase64String(rawHmac);
+
+        return encodeBase64String;
     }
 }

@@ -1,10 +1,15 @@
 package web.mvc.service.reservation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import web.mvc.dto.reservation.BankDTO;
 import web.mvc.dto.reservation.BankerAllResponseDTO;
 import web.mvc.dto.reservation.BankerInfoResponseDTO;
 import web.mvc.dto.reservation.ReservationDTO;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.security.InvalidKeyException;
 import java.util.List;
 
 public interface ReservationService {
@@ -49,7 +54,7 @@ public interface ReservationService {
      * @param reservationDTO
      * @return String 성공여부
      */
-    public String doReservation(ReservationDTO reservationDTO);
+    public String doReservation(ReservationDTO reservationDTO)throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException;
 
     /**
      * 예약취소
@@ -58,7 +63,7 @@ public interface ReservationService {
      * @param reservationId
      * @return String 성공여부
      */
-    public String cancelReservation(Long reservationId);
+    public String cancelReservation(Long reservationId)throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException;
 
     /**
      * 예약변경
@@ -68,6 +73,6 @@ public interface ReservationService {
      * @param reservationId
      * @return String 성공여부
      */
-    public String changeReservation(ReservationDTO reservationDTO, Long reservationId);
+    public String changeReservation(ReservationDTO reservationDTO, Long reservationId)throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException;
 
 }

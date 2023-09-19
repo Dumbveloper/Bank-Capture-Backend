@@ -1,11 +1,16 @@
 package web.mvc.service.mypage;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
 import web.mvc.domain.Schedule;
 import web.mvc.dto.mypage.BankerRankingResponseDTO;
 import web.mvc.dto.mypage.BankerScheduleResponseDTO;
 import web.mvc.dto.reservation.ScheduleDTO;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface MyPageBankerService {
@@ -44,6 +49,6 @@ public interface MyPageBankerService {
      * 마이페이지(행원) - 방문완료 체크
      * reservation_id
      */
-    String updateFlag(Long reservationId);
+    String updateFlag(Long reservationId) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException;
 
 }
