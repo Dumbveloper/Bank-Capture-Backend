@@ -12,13 +12,13 @@ import javax.persistence.*;
         "        ROUND(subquery.avg_star, 2) AS avg_star\n" +
         "    FROM\n" +
         "        (SELECT \n" +
-        "            test.reservation.bank_id AS bank_id,\n" +
-        "                AVG(test.reservation.bank_star_rating) AS avg_star\n" +
+        "            reservation.bank_id AS bank_id,\n" +
+        "                AVG(reservation.bank_star_rating) AS avg_star\n" +
         "        FROM\n" +
-        "            test.reservation\n" +
+        "            reservation\n" +
         "        WHERE\n" +
-        "            (test.reservation.bank_star_rating > 0)\n" +
-        "        GROUP BY test.reservation.bank_id) subquery")
+        "            (reservation.bank_star_rating > 0)\n" +
+        "        GROUP BY reservation.bank_id) subquery")
 @Immutable
 @Getter
 @Setter

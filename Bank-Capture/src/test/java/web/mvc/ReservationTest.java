@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 @Transactional
 public class ReservationTest {
+
     @Autowired
     private ReservationService reservationService;
 
