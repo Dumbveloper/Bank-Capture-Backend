@@ -51,7 +51,7 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
      */
     //List<Reservation> findReservationByCustomerId(Long customerId);
 // b.bank_name AS bankName, b.bank_addr AS bankAddr,    INNER JOIN banker b ON r.bank_id = b.bank_id
-    @Query(value = "SELECT NEW web.mvc.dto.mypage.CustomerScheduleResponseDTO(r.reservationId, b.bankName, b.bankAddr, r.reservationDate, r.reservationTime, bk.bankerName,t.taskName, r.comment, r.reservationFinishFlag) FROM Reservation r JOIN r.bank b JOIN r.task t JOIN r.banker bk LEFT JOIN r.customer c WHERE c.customerId = :customerId")
+    @Query(value = "SELECT NEW web.mvc.dto.mypage.CustomerScheduleResponseDTO(r.reservationId, b.bankId, b.bankName, b.bankAddr, r.reservationDate, r.reservationTime, bk.bankerName,t.taskName, r.comment, r.reservationFinishFlag) FROM Reservation r JOIN r.bank b JOIN r.task t JOIN r.banker bk LEFT JOIN r.customer c WHERE c.customerId = :customerId")
     List<CustomerScheduleResponseDTO> findReservationDetailsByCustomerId(@Param("customerId") Long customerId);
 
     /**

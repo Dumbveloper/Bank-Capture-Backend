@@ -6,9 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import web.mvc.domain.Customer;
+import web.mvc.dto.users.BankerDTO;
 import web.mvc.dto.users.CustomerDTO;
 import web.mvc.dto.users.CustomerLoginRequestDTO;
 import web.mvc.dto.users.CustomerLoginResponseDTO;
@@ -16,6 +18,7 @@ import web.mvc.repository.CustomerRepository;
 import web.mvc.service.user.UserService;
 
 import java.util.Optional;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
