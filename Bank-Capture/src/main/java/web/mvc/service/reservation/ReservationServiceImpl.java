@@ -10,9 +10,6 @@ import web.mvc.dto.reservation.*;
 import web.mvc.repository.*;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,30 +41,39 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public List<BankDTO> findBankAll() {
-        List<BankDTO> bankdtolist = new ArrayList<>();
-        List<Map<String, Object>> bankmaplist = bankRepository.findDistinctAvgStar();
+        QBank bank = QBank.bank;
+        QBankAverageStar bankAverageStar = QBankAverageStar.bankAverageStar;
 
-        for (Map<String, Object> b : bankmaplist) {
-            Long bankId = ((BigInteger) b.get("bank_id")).longValue();
-
-            String bankname = (String) b.get("bank_name");
-            Double locationX = (Double) b.get("locationx");
-            Double locationY = (Double) b.get("locationy");
-            String bankphone = (String) b.get("bank_phone");
-            String bankaddr = (String) b.get("bank_addr");
+        List<BankDTO> list = jpaQueryFactory.select(Projections.constructor(
+                BankDTO.class,bank.bankId,bank.bankName,bank.locationX,bank.locationY,bank.bankPhone,bank.bankAddr,bankAverageStar.avgStar
+        )).from(bank).leftJoin(bankAverageStar).on(bank.bankId.eq(bankAverageStar.bankId)).fetch();
 
 
-            if(b.get("avg_star")!= null) {
-                Double avgstar = ((BigDecimal) b.get("avg_star")).doubleValue();
-                bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr, avgstar));
-            }
 
-            else{
-                bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr));
-            }
-
-        }
-        return bankdtolist;
+//        List<BankDTO> bankdtolist = new ArrayList<>();
+//        List<Map<String, Object>> bankmaplist = bankRepository.findDistinctAvgStar();
+//
+//        for (Map<String, Object> b : bankmaplist) {
+//            Long bankId = ((BigInteger) b.get("bank_id")).longValue();
+//
+//            String bankname = (String) b.get("bank_name");
+//            Double locationX = (Double) b.get("locationx");
+//            Double locationY = (Double) b.get("locationy");
+//            String bankphone = (String) b.get("bank_phone");
+//            String bankaddr = (String) b.get("bank_addr");
+//
+//
+//            if(b.get("avg_star")!= null) {
+//                Double avgstar = ((BigDecimal) b.get("avg_star")).doubleValue();
+//                bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr, avgstar));
+//            }
+//
+//            else{
+//                bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr));
+//            }
+//
+//        }
+        return list;
     }
 
     @Override

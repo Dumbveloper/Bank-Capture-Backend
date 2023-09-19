@@ -43,6 +43,8 @@ public class ReservationTest {
     private BankRepository bankRepository;
 
 
+
+
     /**
      * ReservationDTO 를  Reservation Entity로 변환하는 함수
      * @return Reservation
@@ -65,6 +67,8 @@ public class ReservationTest {
                 build();
         return reservation;
     }
+
+
 
     @Test
     public void 예약하기() throws Exception{
