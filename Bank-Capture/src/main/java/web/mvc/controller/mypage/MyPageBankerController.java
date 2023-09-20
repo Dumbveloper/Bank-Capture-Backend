@@ -1,5 +1,6 @@
 package web.mvc.controller.mypage;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,10 @@ import web.mvc.dto.mypage.BankerScheduleResponseDTO;
 import web.mvc.dto.reservation.ScheduleDTO;
 import web.mvc.service.mypage.MyPageBankerService;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +66,7 @@ public class MyPageBankerController {
     })
     @ApiParam(value = "방문완료처리할 예약의 아이디", required = true)
     @PostMapping("/schedule/done")
-    public String updateFlag(@RequestBody Map<String, Long> data) {
+    public String updateFlag(@RequestBody Map<String, Long> data) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         Long reservationId = data.get("reservationId");
         return myPageBankerService.updateFlag(reservationId);
     }

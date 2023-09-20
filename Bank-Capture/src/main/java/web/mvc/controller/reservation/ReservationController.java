@@ -1,5 +1,6 @@
 package web.mvc.controller.reservation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,10 @@ import web.mvc.dto.reservation.BankerInfoResponseDTO;
 import web.mvc.dto.reservation.ReservationDTO;
 import web.mvc.service.reservation.ReservationService;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +72,7 @@ public class ReservationController {
     })
     @ApiParam(value = "예약 정보 객체", required = true)
     @PostMapping("/book")
-    public String reservation(@RequestBody ReservationDTO reservationDTO){
+    public String reservation(@RequestBody ReservationDTO reservationDTO) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
 
         Long reservationId = reservationDTO.getReservationId();
 
@@ -85,7 +90,7 @@ public class ReservationController {
     })
     @ApiParam(value = "취소할 예약 아이디", required = true)
     @PostMapping("/cancle")
-    public String cancelReservation(@RequestBody Map<String, Long> data){
+    public String cancelReservation(@RequestBody Map<String, Long> data) throws UnsupportedEncodingException, URISyntaxException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException {
         Long reservationId = data.get("reservationId");
         return reservationService.cancelReservation(reservationId);
     }

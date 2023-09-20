@@ -52,6 +52,9 @@ dependencies {
 
     //Bcrypt 암호화 의존성
     implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
+
+    //sms api
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 }
 
 tasks.named('test') {
