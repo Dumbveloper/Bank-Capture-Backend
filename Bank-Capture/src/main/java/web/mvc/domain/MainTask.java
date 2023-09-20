@@ -24,6 +24,4 @@ public class MainTask {
     @JoinColumn(name = "task_id")
     private Task task;  // 업무
 
-
-
 }

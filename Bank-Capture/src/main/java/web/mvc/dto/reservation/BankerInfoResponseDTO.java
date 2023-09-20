@@ -18,5 +18,4 @@ public class BankerInfoResponseDTO {
     private List<CertificationDTO> certificationList = new ArrayList<>();
     private List<BankerReviewDTO> bankerReviewList = new ArrayList<>();
 
-
 }

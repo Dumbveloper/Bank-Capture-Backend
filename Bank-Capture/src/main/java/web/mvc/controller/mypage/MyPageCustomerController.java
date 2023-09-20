@@ -1,6 +1,7 @@
 package web.mvc.controller.mypage;
 
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.mypage.CustomerReviewRequestDTO;
@@ -12,11 +13,10 @@ import java.util.Map;
 
 @Api(tags = "고객 마이페이지 API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/myPage/customer")
 public class MyPageCustomerController {
-
-    @Autowired
-    private MyPageCustomerService myPageCustomerService;
+    private final MyPageCustomerService myPageCustomerService;
 
     @ApiOperation(value = "고객 스케줄 조회", notes = "해당 고객의 모든 예약을 가져오고 Front에서 finishFlag = F일 경우 왼쪽, T일 경우 오른쪽에 보여준다.")
     @ApiResponses({

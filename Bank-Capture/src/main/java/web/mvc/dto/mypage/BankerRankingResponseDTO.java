@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 /**
  * /myPage/banker/ranking
  * 마이페이지(행원) 지점내 순위

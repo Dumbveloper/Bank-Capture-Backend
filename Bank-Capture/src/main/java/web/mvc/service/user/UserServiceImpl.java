@@ -1,5 +1,6 @@
 package web.mvc.service.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import web.mvc.domain.Bank;
@@ -13,19 +14,17 @@ import web.mvc.repository.BankRepository;
 import web.mvc.repository.BankerRepository;
 import web.mvc.repository.CustomerRepository;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
-
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private BankerRepository bankerRepository;
-    @Autowired
-    private BankRepository bankRepository;
-    @Autowired
-    private EncryptHelper encryptHelper;
+    private final CustomerRepository customerRepository;
+    private final BankerRepository bankerRepository;
+    private final BankRepository bankRepository;
+    private final EncryptHelper encryptHelper;
 
     @Override
     public CustomerLoginResponseDTO customerLogin(CustomerLoginRequestDTO customerLoginRequestDTO ) {
@@ -84,23 +83,15 @@ public class UserServiceImpl implements UserService{
         String encrypted = encryptHelper.encrypt(dtoPassword);
         customerDTO.setCustomerPassword(encrypted);
 
-        Customer customer = Customer.builder().
-                customerEmail(customerDTO.getCustomerEmail()).
-                customerPassword(customerDTO.getCustomerPassword()).
-                customerPhone(customerDTO.getCustomerPhone()).
-                customerName(customerDTO.getCustomerName()).
-                build();
-
+        Customer customer = Customer.toEntity(customerDTO);
         //회원가입
         customerRepository.save(customer);
-
         return "success";
 
     }
 
     @Override
     public String registerBanker(BankerDTO bankerDTO) {
-
 
         //이메일 중복여부 체크
         if(bankerRepository.findByBankerEmail(bankerDTO.getBankerEmail()) != null) {
@@ -112,22 +103,11 @@ public class UserServiceImpl implements UserService{
         String encrypted = encryptHelper.encrypt(dtoPassword);
         bankerDTO.setBankerPassword(encrypted);
 
-        Optional<Bank> bank = bankRepository.findById(bankerDTO.getBankerBankId());
+        Bank bank = bankRepository.findById(bankerDTO.getBankerBankId()).get();
 
-        Banker banker = Banker.builder().
-                bank(bank.get()).
-                bankerName(bankerDTO.getBankerName()).
-                bankerEmail(bankerDTO.getBankerEmail()).
-                bankerPassword(bankerDTO.getBankerPassword()).
-                bankerCareer(bankerDTO.getBankerCareer()).
-                bankerImgPath(bankerDTO.getBankerImgPath()).
-                bankerInfo(bankerDTO.getBankerInfo()).
-                bankerReviewFlag(bankerDTO.getBankerReviewFlag()).
-                build();
-
+        Banker banker = Banker.toEntity(bank, bankerDTO);
         //회원가입
         bankerRepository.save(banker);
-
         return "success";
 
     }

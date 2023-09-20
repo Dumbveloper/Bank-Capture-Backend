@@ -1,5 +1,6 @@
 package web.mvc.service.mypage;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import web.mvc.domain.Reservation;
@@ -9,13 +10,15 @@ import web.mvc.dto.mypage.CustomerScheduleResponseDTO;
 import web.mvc.repository.ReservationRepository;
 
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-
+@Transactional
+@RequiredArgsConstructor
 public class MyPageCustomerServiceImpl implements MyPageCustomerService{
-    @Autowired
-    private ReservationRepository reservationRepository;
+
+    private final ReservationRepository reservationRepository;
 
     @Override
     public List<CustomerScheduleResponseDTO> customerSchedule(Long customerId) {

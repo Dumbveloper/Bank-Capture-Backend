@@ -23,24 +23,6 @@ public interface BankerRepository extends JpaRepository<Banker,Long> {
     Banker findByBankerEmail(String bankerEmail);
 
     /**
-     * 행원 조회 - 로그인시 해당 이메일, 비밀번호를 가진 행원이 있는지 조회
-     * @param bankerEmail
-     * @param bankerPassword
-     * @return Banker
-     */
-    Banker findByBankerEmailAndBankerPassword(String bankerEmail, String bankerPassword);
-
-    /**
-     * /reservation/bankerAll
-     * 예약하기 - 예약가능한 행원 조회 / 해당 지점 내의 행원 전부 찾기
-     *
-     * @param bankId
-     * @return List<Banker>
-     */
-    //List<Banker> findBanker(String bankId);
-
-
-    /**
      * /myPage/banker/ranking
      * 마이페이지(행원) - 지점내 순위
      *

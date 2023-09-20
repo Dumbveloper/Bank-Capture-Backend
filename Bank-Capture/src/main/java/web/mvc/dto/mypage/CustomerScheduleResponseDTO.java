@@ -21,7 +21,6 @@ public class CustomerScheduleResponseDTO {
     private String reservationTime;  // 예약 시간
     private String bankerName;  // 행원이름
     private String taskName;  //업무 이름
-  //  private String documentLink;  // 필요서류 링크
     private String bankerReviewComment;  // 행원리뷰 코멘트
     private String finishFlag; // 고객 방문 여부 플래그
 }

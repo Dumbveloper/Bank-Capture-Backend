@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-@ToString
 /**
  * /myPage/banker/schedule/after
  * 마이페이지(행원) - 예약관리-방문후 예약
