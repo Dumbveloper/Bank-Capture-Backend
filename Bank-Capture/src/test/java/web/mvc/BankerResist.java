@@ -29,7 +29,7 @@ public class BankerResist {
     private BankRepository bankRepository;
 
     @Test
-    @Rollback(value = false)
+    //@Rollback(value = false)
     public void 행원생성() throws Exception{
         String [] info={"감사합니다. 최선을 다하겠습니다.","고객에게 언제나 만족스러운 서비스를 제공하겠습니다.","최고의 서비스로 보답하겠습니다.",
         "모두가 안심할 수 있는 서비스를 제공하겠습니다.","고객 우선 가치를 실천하겠습니다.","금융 전문가로서 최선을 다하겠습니다."};
