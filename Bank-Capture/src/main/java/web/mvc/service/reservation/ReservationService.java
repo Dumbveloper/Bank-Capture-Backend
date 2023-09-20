@@ -18,6 +18,15 @@ public interface ReservationService {
 
 
     /**
+     * /reservation/search
+     * 지점 검색시 검색명 포함하는 지점 조회
+     * @param name
+     * @return
+     */
+    public List<BankDTO> findBankSearchByName(String name);
+
+
+    /**
      * /reservation/bankerAll
      * 예약하기 - 예약가능한 행원 조회
      * Banker , Schedule , Task , 계산뷰

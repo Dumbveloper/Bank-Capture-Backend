@@ -30,6 +30,16 @@ public class ReservationController {
         return reservationService.findBankAll();
     }
 
+    @ApiOperation(value = "검색어로 지점 조회하기", notes = "검색어에 해당하는 지점 상세정보를 보여준다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "조회 성공"),
+            @ApiResponse(code = 200, message = "실패")
+    })
+    @GetMapping("/search")
+    public List<BankDTO> findBankBySearchName(String name) {
+        return reservationService.findBankSearchByName(name);
+    }
+
     @ApiOperation(value = "예약가능한 행원보기", notes = "해당 지점내 선택한 업무를 수행하는 모든 행원의 정보를 보여준다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "조회 성공"),

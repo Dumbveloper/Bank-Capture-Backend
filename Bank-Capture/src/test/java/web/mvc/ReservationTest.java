@@ -1,12 +1,15 @@
 package web.mvc;
 
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import web.mvc.domain.*;
+import web.mvc.dto.reservation.BankDTO;
 import web.mvc.dto.reservation.BankerAllResponseDTO;
 import web.mvc.dto.reservation.BankerInfoResponseDTO;
 import web.mvc.dto.reservation.ReservationDTO;
@@ -25,6 +28,8 @@ import static org.junit.Assert.assertEquals;
 public class ReservationTest {
 
     @Autowired
+    private JPAQueryFactory jpaQueryFactory;
+    @Autowired
     private ReservationService reservationService;
 
     @Autowired
@@ -42,14 +47,28 @@ public class ReservationTest {
     @Autowired
     private BankRepository bankRepository;
 
+    @Test
+    public void findBankSearchByName(){
+        QBank bank = QBank.bank;
+        QBankAverageStar bankAverageStar = QBankAverageStar.bankAverageStar;
 
+        List<BankDTO> list = jpaQueryFactory.select(Projections.constructor(
+                        BankDTO.class, bank.bankId, bank.bankName, bank.locationX, bank.locationY
+                        , bank.bankPhone, bank.bankAddr, bankAverageStar.avgStar))
+                .from(bank).leftJoin(bankAverageStar)
+                .on(bank.bankId.eq(bankAverageStar.bankId))
+                .where(bank.bankName.contains("테헤란"))
+                .fetch();
 
+        System.out.println(list);
+    }
 
     /**
      * ReservationDTO 를  Reservation Entity로 변환하는 함수
      * @return Reservation
      */
-    private Reservation dtoToEntity(ReservationDTO reservationDTO) {
+    @Test
+    public Reservation dtoToEntity(ReservationDTO reservationDTO) {
 
         Customer customer = customerRepository.findById(reservationDTO.getCustomerId()).orElse(null);
         Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);

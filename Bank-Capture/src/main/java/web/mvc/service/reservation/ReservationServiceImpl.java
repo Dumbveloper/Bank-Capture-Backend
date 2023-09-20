@@ -45,8 +45,11 @@ public class ReservationServiceImpl implements ReservationService{
         QBankAverageStar bankAverageStar = QBankAverageStar.bankAverageStar;
 
         List<BankDTO> list = jpaQueryFactory.select(Projections.constructor(
-                BankDTO.class,bank.bankId,bank.bankName,bank.locationX,bank.locationY,bank.bankPhone,bank.bankAddr,bankAverageStar.avgStar
-        )).from(bank).leftJoin(bankAverageStar).on(bank.bankId.eq(bankAverageStar.bankId)).fetch();
+                BankDTO.class,bank.bankId,bank.bankName,bank.locationX,bank.locationY
+                ,bank.bankPhone,bank.bankAddr,bankAverageStar.avgStar))
+                .from(bank).leftJoin(bankAverageStar)
+                .on(bank.bankId.eq(bankAverageStar.bankId))
+                .fetch();
 
 
 
@@ -73,6 +76,21 @@ public class ReservationServiceImpl implements ReservationService{
 //            }
 //
 //        }
+        return list;
+    }
+
+    @Override
+    public List<BankDTO> findBankSearchByName(String name) {
+        QBank bank = QBank.bank;
+        QBankAverageStar bankAverageStar = QBankAverageStar.bankAverageStar;
+
+        List<BankDTO> list = jpaQueryFactory.select(Projections.constructor(
+                        BankDTO.class,bank.bankId,bank.bankName,bank.locationX,bank.locationY
+                        ,bank.bankPhone,bank.bankAddr,bankAverageStar.avgStar))
+                .from(bank).leftJoin(bankAverageStar)
+                .on(bank.bankId.eq(bankAverageStar.bankId))
+                .where(bank.bankName.contains(name))
+                .fetch();
         return list;
     }
 
