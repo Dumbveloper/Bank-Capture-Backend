@@ -107,7 +107,7 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
                 .append(customer.getCustomerName())
                 .append("님 KB BankCapture 방문은 만족스러우셨나요? \n\n")
                 .append("더 나은 서비스 제공과 다른 이용자들을 위해서 리뷰를 남겨주세요.\n")
-                .append("http://localhost:8081")
+                .append("https://bankcapture.com")
                 .toString();
         MessageDTO messageDto = MessageDTO.builder().to(customer.getCustomerPhone()).subject("KB BankCapture 은행 방문 완료").content(message).build();
         sendSms(messageDto);
