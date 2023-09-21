@@ -12,12 +12,4 @@ public interface CustomerRepository extends JpaRepository<Customer,Long> {
      * @return
      */
     Customer findByCustomerEmail(String customerEmail);
-
-    /**
-     * 고객 조회 - 로그인시 해당 이메일, 비밀번호를 가진 고객이 있는지 조회
-     * @param customerEmail
-     * @param customerPassword
-     * @return
-     */
-    Customer findByCustomerEmailAndCustomerPassword(String customerEmail, String customerPassword);
 }

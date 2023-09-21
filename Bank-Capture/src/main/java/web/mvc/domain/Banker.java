@@ -1,6 +1,7 @@
 package web.mvc.domain;
 
 import lombok.*;
+import web.mvc.dto.users.BankerDTO;
 
 import javax.persistence.*;
 
@@ -27,5 +28,18 @@ public class Banker {
     private String bankerInfo;  //행원 한줄 소개
     private String bankerReviewFlag; //행원 리뷰 공개 여부 플래그
 
+    public static Banker toEntity(Bank bank, BankerDTO bankerDTO) {
+        Banker banker = Banker.builder().
+                bank(bank).
+                bankerName(bankerDTO.getBankerName()).
+                bankerEmail(bankerDTO.getBankerEmail()).
+                bankerPassword(bankerDTO.getBankerPassword()).
+                bankerCareer(bankerDTO.getBankerCareer()).
+                bankerImgPath(bankerDTO.getBankerImgPath()).
+                bankerInfo(bankerDTO.getBankerInfo()).
+                bankerReviewFlag(bankerDTO.getBankerReviewFlag()).
+                build();
+        return banker;
+    }
 
 }

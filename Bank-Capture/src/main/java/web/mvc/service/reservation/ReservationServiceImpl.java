@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class ReservationServiceImpl implements ReservationService{
     @Value("${naver-cloud-sms.accessKey}")
     private String accessKey;
@@ -50,26 +53,13 @@ public class ReservationServiceImpl implements ReservationService{
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
 
-    @Autowired
-    private JPAQueryFactory jpaQueryFactory;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private BankerRepository bankerRepository;
-
-    @Autowired
-    private TaskRepository taskRepository;
-
-    @Autowired
-    private ScheduleRepository scheduleRepository;
-
-    @Autowired
-    private BankRepository bankRepository;
+    private final JPAQueryFactory jpaQueryFactory;
+    private final ReservationRepository reservationRepository;
+    private final CustomerRepository customerRepository;
+    private final BankerRepository bankerRepository;
+    private final TaskRepository taskRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final BankRepository bankRepository;
 
     @Override
     public List<BankDTO> findBankAll() {
@@ -83,31 +73,6 @@ public class ReservationServiceImpl implements ReservationService{
                 .on(bank.bankId.eq(bankAverageStar.bankId))
                 .fetch();
 
-
-
-//        List<BankDTO> bankdtolist = new ArrayList<>();
-//        List<Map<String, Object>> bankmaplist = bankRepository.findDistinctAvgStar();
-//
-//        for (Map<String, Object> b : bankmaplist) {
-//            Long bankId = ((BigInteger) b.get("bank_id")).longValue();
-//
-//            String bankname = (String) b.get("bank_name");
-//            Double locationX = (Double) b.get("locationx");
-//            Double locationY = (Double) b.get("locationy");
-//            String bankphone = (String) b.get("bank_phone");
-//            String bankaddr = (String) b.get("bank_addr");
-//
-//
-//            if(b.get("avg_star")!= null) {
-//                Double avgstar = ((BigDecimal) b.get("avg_star")).doubleValue();
-//                bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr, avgstar));
-//            }
-//
-//            else{
-//                bankdtolist.add(new BankDTO(bankId, bankname, locationX, locationY, bankphone, bankaddr));
-//            }
-//
-//        }
         return list;
     }
 
@@ -237,8 +202,6 @@ public class ReservationServiceImpl implements ReservationService{
         Banker banker = bankerRepository.findById(reservationDTO.getBankerId()).orElse(null);
         Task task = taskRepository.findById(reservationDTO.getTaskId()).orElse(null);
         Bank bank = bankRepository.findById(reservationDTO.getBankId()).orElse(null);
-
-
 
 
         Reservation reservation = Reservation.builder().

@@ -2,6 +2,7 @@ package web.mvc.service.mypage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ import web.mvc.repository.*;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class MyPageBankerServiceImpl implements MyPageBankerService{
     @Value("${naver-cloud-sms.accessKey}")
     private String accessKey;
@@ -48,24 +52,17 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
 
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired
-    private BankerRepository bankerRepository;
-    @Autowired
-    private BankRepository bankRepository;
-    @Autowired
-    private ScheduleRepository scheduleRepository;
+    private final ReservationRepository reservationRepository;
+    private final BankerRepository bankerRepository;
+    private final BankRepository bankRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final CustomerRepository customerRep;
 
-    @Autowired
-    private CustomerRepository customerRep;
     @Override
     public List<BankerScheduleResponseDTO> bankerSchedule(Long bankerId) {
         List<BankerScheduleResponseDTO> list = reservationRepository.findReservationDetailsByBankerId(bankerId);
         return list;
     }
-
-
 
     @Override
     public Page<BankerRankingResponseDTO> bankerRanking(Long bankId,int page, int pageSize) {
@@ -77,19 +74,8 @@ public class MyPageBankerServiceImpl implements MyPageBankerService{
     public String checkTime(ScheduleDTO scheduleDTO) {
         Banker insertBanker = bankerRepository.findById(scheduleDTO.getBankerId()).orElse(null);
         Bank insertBank = bankRepository.findById(scheduleDTO.getBankId()).orElse(null);
-        Schedule insertSchedule = Schedule.builder()
-                .banker(insertBanker)
-                .bank(insertBank)
-                .scheduleDate(scheduleDTO.getScheduleDate())
-                .time1(scheduleDTO.getTime1())
-                .time2(scheduleDTO.getTime2())
-                .time3(scheduleDTO.getTime3())
-                .time4(scheduleDTO.getTime4())
-                .time5(scheduleDTO.getTime5())
-                .time6(scheduleDTO.getTime6())
-                .time7(scheduleDTO.getTime7()).build();
+        Schedule insertSchedule = Schedule.toEntity(insertBanker, insertBank, scheduleDTO);
         scheduleRepository.save(insertSchedule);
-
 
         return "success";
     }

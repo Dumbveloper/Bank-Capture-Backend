@@ -1,6 +1,7 @@
 package web.mvc.controller.user;
 
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,10 +11,10 @@ import web.mvc.service.user.UserService;
 
 @Api(tags = "회원관리 API")
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @ApiOperation(value = "회원 로그인", notes = "이메일과 비밀번호로 로그인을 한다.")
     @ApiResponses({
@@ -23,7 +24,6 @@ public class UserController {
     @ApiParam(value = "회원 로그인 정보 객체", required = true)
     @PostMapping("/customer-login")
     public CustomerLoginResponseDTO customerLogin(@RequestBody CustomerLoginRequestDTO customerLoginRequestDTO){
-        System.out.println("유저로그인");
         return userService.customerLogin(customerLoginRequestDTO);
     }
 
@@ -35,9 +35,6 @@ public class UserController {
     @ApiParam(value = "행원 로그인 정보 객체", required = true)
     @PostMapping("/banker-login")
     public BankerLoginResponseDTO bankerLogin(@RequestBody BankerLoginRequestDTO bankerLoginRequestDTO){
-        System.out.println(bankerLoginRequestDTO.getEmail());
-        System.out.println(bankerLoginRequestDTO.getPassword());
-        System.out.println("행원로그인");
         return userService.bankerLogin(bankerLoginRequestDTO);
     }
 

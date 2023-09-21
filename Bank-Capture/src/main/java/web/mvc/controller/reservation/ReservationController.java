@@ -2,6 +2,7 @@ package web.mvc.controller.reservation;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import web.mvc.dto.reservation.BankDTO;
@@ -19,11 +20,10 @@ import java.util.Map;
 
 @Api(tags = "예약관리 API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/reservation")
 public class ReservationController {
-
-    @Autowired
-    private ReservationService reservationService;
+    private final ReservationService reservationService;
 
     @ApiOperation(value = "지점 전체보기", notes = "전체 지점의 상세정보를 보여준다.")
     @ApiResponses({

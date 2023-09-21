@@ -2,6 +2,7 @@ package web.mvc.controller.mypage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,10 @@ import java.util.Map;
 
 @Api(tags = "행원 마이페이지 API")
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/myPage/banker")
 public class MyPageBankerController {
-
-    @Autowired
-    private MyPageBankerService myPageBankerService;
+    private final MyPageBankerService myPageBankerService;
 
     @ApiOperation(value = "행원 스케줄 조회", notes = "해당 행원의 모든 예약을 가져오고 Front에서 finishFlag = F일 경우 왼쪽, T일 경우 오른쪽에 보여준다.")
     @ApiResponses({

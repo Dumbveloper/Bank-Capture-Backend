@@ -26,7 +26,6 @@ import javax.persistence.*;
 public class BankerRating {
     @Id
     private Long bankerId;  //행원 ID
-
     private Long bankId; //은행 ID
     private Double avgStar; //평균 별점
     private Long cntComment; //리뷰 개수
