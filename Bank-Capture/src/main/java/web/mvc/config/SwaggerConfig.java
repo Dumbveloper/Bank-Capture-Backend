@@ -26,7 +26,7 @@ public class SwaggerConfig {
     public ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("뱅크캡처")
-                .description("KB IT'S YOUR LIFE 3반 1조 - 팀 케일")
+                .description("KB IT'S YOUR LIFE 3반 1조 - 팀 Six Guys")
                 .version("0.1")
                 .build();
     }

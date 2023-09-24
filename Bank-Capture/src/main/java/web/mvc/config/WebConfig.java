@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         //http://localhost:3000로 들어오는 모든 CORS 허용
         corsRegistry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000");
+                .allowedOrigins("*");
 
     }
 }

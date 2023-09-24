@@ -244,6 +244,11 @@ public class ReservationServiceImpl implements ReservationService{
         String reservationYear = resDate.substring(0,4);
         String reservationMonth = resDate.substring(4,6);
         String reservationDay = resDate.substring(6,8);
+        int reservationTime = Integer.parseInt(reservation.getReservationTime());
+        if(reservationTime <=2)
+            reservationTime += 9;
+        else
+            reservationTime +=10;
 
         String message = new StringBuilder()
                 .append("KB BankCapture 예약완료 \n\n")
@@ -252,10 +257,10 @@ public class ReservationServiceImpl implements ReservationService{
                 .append("  지점명 : ").append(bank.getBankName())
                 .append("\n  예약날짜 : ").append(reservationYear).append("년 ")
                 .append(reservationMonth).append("월 ").append(reservationDay).append("일")
-                .append("\n  예약 시간 : ").append((Integer.parseInt(reservation.getReservationTime())+9)).append("시")
+                .append("\n  예약 시간 : ").append(reservationTime).append("시")
                 .append("\n  예약 행원 : ").append(banker.getBankerName()).append(" 행원")
                 .append("\n  예약 업무 : ").append(task.getTaskName())
-                .append("\n\n해당 업무에 필요한 서류를 아래 링크에서 확인하신 후, 필요서류를 구비하여 방문하시는 것을 추천드립니다.\n")
+                .append("\n\n해당 업무에 필요한 서류를 아래 링크에서 확인하신 후, 필요서류를 구비하여 방문하시는 것을 추천드립니다.\n\n")
                 .append("https://obank.kbstar.com/quics?page=C020003#loading")
                 .toString();
         MessageDTO messageDto = MessageDTO.builder().to(customer.getCustomerPhone()).subject("KB BankCapture 방문예약 완료").content(message).build();
@@ -301,6 +306,11 @@ public class ReservationServiceImpl implements ReservationService{
         String reservationYear = resDate.substring(0,4);
         String reservationMonth = resDate.substring(4,6);
         String reservationDay = resDate.substring(6,8);
+        int reservationTime = Integer.parseInt(reservation.getReservationTime());
+        if(reservationTime <=2)
+            reservationTime += 9;
+        else
+            reservationTime +=10;
 
         String message = new StringBuilder()
                 .append("KB BankCapture 예약취소 \n\n")
@@ -308,10 +318,10 @@ public class ReservationServiceImpl implements ReservationService{
                 .append("님 \n KB BankCapture ")
                 .append(reservationYear).append("년 ")
                 .append(reservationMonth).append("월 ").append(reservationDay).append("일")
-                .append((Integer.parseInt(reservation.getReservationTime())+9)).append("시 ")
+                .append(reservationTime).append("시 ")
                 .append("방문 예약이 취소되었습니다.\n")
-                .append("\n 새로운 방문예약을 원하실 경우, KB Bank Capture 홈페이지를 방문해주세요.\n")
-                .append("http://localhost:8081")
+                .append("\n 새로운 방문예약을 원하실 경우, KB Bank Capture 홈페이지를 방문해주세요.\n\n")
+                .append("https://bankcapture.site")
                 .toString();
         MessageDTO messageDto = MessageDTO.builder().to(customer.getCustomerPhone()).subject("KB Bank Capture 방문예약 취소").content(message).build();
         sendSms(messageDto);
@@ -382,6 +392,11 @@ public class ReservationServiceImpl implements ReservationService{
         String reservationYear = resDate.substring(0,4);
         String reservationMonth = resDate.substring(4,6);
         String reservationDay = resDate.substring(6,8);
+        int reservationTime = Integer.parseInt(reservation.getReservationTime());
+        if(reservationTime <=2)
+            reservationTime += 9;
+        else
+            reservationTime +=10;
 
         String message = new StringBuilder()
                 .append("KB BankCapture 예약변경 \n\n")
@@ -390,10 +405,10 @@ public class ReservationServiceImpl implements ReservationService{
                 .append("  지점명 : ").append(bank.getBankName())
                 .append("\n  예약날짜 : ").append(reservationYear).append("년 ")
                 .append(reservationMonth).append("월 ").append(reservationDay).append("일")
-                .append("\n  예약 시간 : ").append((Integer.parseInt(reservation.getReservationTime())+9)).append("시")
+                .append("\n  예약 시간 : ").append(reservationTime).append("시")
                 .append("\n  예약 행원 : ").append(afterBanker.getBankerName()).append(" 행원")
                 .append("\n  예약 업무 : ").append(task.getTaskName())
-                .append("\n\n해당 업무에 필요한 서류를 아래 링크에서 확인하신 후, 필요서류를 구비하여 방문하시는 것을 추천드립니다.\n")
+                .append("\n\n해당 업무에 필요한 서류를 아래 링크에서 확인하신 후, 필요서류를 구비하여 방문하시는 것을 추천드립니다.\n\n")
                 .append("https://obank.kbstar.com/quics?page=C020003#loading")
                 .toString();
 
